@@ -1,11 +1,24 @@
 import React, { useState }from "react";
 import { Sidebar } from "./components/Sidebar";
+import { TopPanel } from "./components/TopPanel";
 import { Rnd } from "react-rnd";
 
 const App = () => {
     const [selectedProduct, setSelectedProduct] = useState('tshirt')
+    const [selectedView, setSelectedView] = useState('front')
     const [frontImage, setFrontImage] = useState(null)
     const [backImage, setBackImage] = useState(null)
+
+    const views = [
+        {
+            title: 'Vpredu',
+            value: 'front'
+        },
+        {
+            title: 'Vzadu',
+            value: 'back'
+        }
+    ]
 
     const products = [
         {
@@ -25,19 +38,37 @@ const App = () => {
     const backgrounds = [
         {
             type: 'tshirt',
-            image: './assets/bg-tshirt.jpg'
+            view: 'front',
+            image: './assets/bg-tshirt-front.jpg'
+        },
+        {
+            type: 'tshirt',
+            view: 'back',
+            image: './assets/bg-tshirt-back.jpg'
         },
         {
             type: 'polo',
+            view: 'front',
+            image: './assets/bg-polo.jpg'
+        },
+        {
+            type: 'polo',
+            view: 'back',
             image: './assets/bg-polo.jpg'
         },
         {
             type: 'hoodie',
+            view: 'front',
+            image: './assets/bg-hoodie.jpg'
+        },
+        {
+            type: 'hoodie',
+            view: 'back',
             image: './assets/bg-hoodie.jpg'
         }
     ]
 
-    const selectedBg = backgrounds.find((bg) => bg.type === selectedProduct)?.image
+    const selectedBg = backgrounds.find((bg) => bg.type === selectedProduct && bg.view === selectedView)?.image
 
 return (
     <main className="h-screen">
@@ -46,14 +77,20 @@ return (
                 <Sidebar 
                     products={products} 
                     selectedProduct={selectedProduct}
+                    selectedView={selectedView}
                     onProductSelect={setSelectedProduct}
                     onFrontImageSelect={setFrontImage}
                     onBackImageSelect={setBackImage}
                 />
             </div>
-            <div className="col-span-9 p-2">
-                <h2 className="text-3xl font-bold mb-3">Náhľad produktu</h2>
-                <div className={`preview w-full relative rounded-xl overflow-hidden shadow-lg --${selectedProduct}`}>
+            <div className="col-span-9">
+                <TopPanel 
+                    selectedView={selectedView}
+                    views={views}
+                    onViewSelect={setSelectedView}
+                />
+                <h2 className="text-3xl font-bold p-4">Náhľad produktu</h2>
+                <div className={`preview w-full relative rounded-xl overflow-hidden shadow-lg p-4 mx-auto --${selectedProduct} --${selectedView}`}>
                     {selectedBg && (
                         <img
                             src={selectedBg}

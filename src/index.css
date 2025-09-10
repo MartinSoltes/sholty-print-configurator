@@ -1,41 +1,45 @@
 @import "tailwindcss";
 
-.preview.--tshirt .print-area.--front {
+.preview {
+    max-width: 920px;
+}
+
+.preview.--tshirt.--front .print-area {
     top: 21%;
     left: 15%;
     width: 23%;
     height: 63%;
 }
 
-.preview.--tshirt .print-area.--back {
+.preview.--tshirt.--back .print-area {
     top: 17%;
     left: 61.8%;
     width: 23%;
     height: 67%;
 }
 
-.preview.--polo .print-area.--front {
+.preview.--polo.--front .print-area {
     top: 35%;
     left: 16.5%;
     width: 21.5%;
     height: 52%;
 }
 
-.preview.--polo .print-area.--back {
+.preview.--polo.--back .print-area {
     top: 16%;
     left: 61.8%;
     width: 21.5%;
     height: 71%;
 }
 
-.preview.--hoodie .print-area.--front {
+.preview.--hoodie.--front .print-area {
     top: 40.5%;
     left: 16%;
     width: 21.5%;
     height: 42%;
 }
 
-.preview.--hoodie .print-area.--back {
+.preview.--hoodie.--back .print-area {
     top: 35%;
     left: 63%;
     width: 20.5%;

@@ -1,8 +1,9 @@
 import React from 'react'
 import OptionButton from './OptionButton'
 import FileButton from './FileButton'
+import LogoGenerator from './LogoGenerator'
 
-export const Sidebar = ({products, selectedProduct, onProductSelect, onFrontImageSelect, onBackImageSelect}) => {
+export const Sidebar = ({products, selectedProduct, onProductSelect, onFrontImageSelect, onBackImageSelect, selectedView}) => {
   const handleFrontFileChange = (e) => {
     const file = e.target.files[0];
     if (file) onFrontImageSelect(URL.createObjectURL(file));
@@ -31,15 +32,24 @@ export const Sidebar = ({products, selectedProduct, onProductSelect, onFrontImag
             </div>
         )}
 
-        <div className='flex flex-col gap-2 mb-2'>
-          <h2 className="text-2xl font-semibold mb-3">Potlač vpredu</h2>
-          <FileButton callback={handleFrontFileChange}/>
-        </div>
+        {selectedView === 'front' && (
+          <div className='flex flex-col gap-2 mb-4'>
+            <h2 className="text-2xl font-semibold mb-2">Potlač vpredu</h2>
+            <FileButton callback={handleFrontFileChange}/>
+          </div>
+        )}
 
-        <div className='flex flex-col gap-2 mb-2'>
-          <h2 className="text-2xl font-semibold mb-3">Potlač vzadu</h2>
-          <FileButton callback={handleBacktFileChange}/>
-        </div>
+        {selectedView === 'back' && ( 
+          <div className='flex flex-col gap-2 mb-4'>
+            <h2 className="text-2xl font-semibold mb-2">Potlač vzadu</h2>
+            <FileButton callback={handleBacktFileChange}/>
+          </div>
+        )}
+
+        {/* <div className='flex flex-col gap-2 mb-4'>
+          <h2 className="text-2xl font-semibold mb-2">Generovať logo</h2>
+          <LogoGenerator/>
+        </div> */}
     </div>
   )
 }
