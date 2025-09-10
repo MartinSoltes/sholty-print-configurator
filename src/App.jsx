@@ -1,4 +1,5 @@
 import React, { useState }from "react";
+import { products, backgrounds, views } from "./config";
 import { Sidebar } from "./components/Sidebar";
 import { TopPanel } from "./components/TopPanel";
 import { Rnd } from "react-rnd";
@@ -8,65 +9,6 @@ const App = () => {
     const [selectedView, setSelectedView] = useState('front')
     const [frontImage, setFrontImage] = useState(null)
     const [backImage, setBackImage] = useState(null)
-
-    const views = [
-        {
-            title: 'Vpredu',
-            value: 'front'
-        },
-        {
-            title: 'Vzadu',
-            value: 'back'
-        }
-    ]
-
-    const products = [
-        {
-            title: 'Tricko',
-            value: 'tshirt'
-        },
-        {
-            title: 'Polo',
-            value: 'polo'
-        },
-        {
-            title: 'Mikina',
-            value: 'hoodie'
-        }
-    ]
-
-    const backgrounds = [
-        {
-            type: 'tshirt',
-            view: 'front',
-            image: './assets/bg-tshirt-front.jpg'
-        },
-        {
-            type: 'tshirt',
-            view: 'back',
-            image: './assets/bg-tshirt-back.jpg'
-        },
-        {
-            type: 'polo',
-            view: 'front',
-            image: './assets/bg-polo.jpg'
-        },
-        {
-            type: 'polo',
-            view: 'back',
-            image: './assets/bg-polo.jpg'
-        },
-        {
-            type: 'hoodie',
-            view: 'front',
-            image: './assets/bg-hoodie.jpg'
-        },
-        {
-            type: 'hoodie',
-            view: 'back',
-            image: './assets/bg-hoodie.jpg'
-        }
-    ]
 
     const selectedBg = backgrounds.find((bg) => bg.type === selectedProduct && bg.view === selectedView)?.image
 
@@ -100,7 +42,7 @@ return (
                     )}
 
                     <div className="print-area border-dotted border-2 rounded-sm --front absolute z-10">
-                        {frontImage && (
+                        {frontImage && selectedView === 'front' && (
                             <Rnd
                                 bounds="parent"
                                 default={{
@@ -110,22 +52,19 @@ return (
                                 height: 150,
                                 }}
                             >
-                                <img
+                                {frontImage && <img
                                     src={frontImage}
-                                    alt="Front image"
+                                    alt="image"
                                     style={{
                                         position: "absolute",
                                         width: 150,
                                         height: 150,
                                         cursor: "move",
                                     }}
-                                />
+                                />}
                             </Rnd>
                         )}
-                    </div>
-
-                    <div className="print-area border-dotted border-2 rounded-sm --back absolute z-10">
-                        {backImage && (
+                        {backImage && selectedView === 'back' && (
                             <Rnd
                                 bounds="parent"
                                 default={{
@@ -135,16 +74,16 @@ return (
                                 height: 150,
                                 }}
                             >
-                                <img
+                                {backImage && <img
                                     src={backImage}
-                                    alt="Back image"
+                                    alt="image"
                                     style={{
                                         position: "absolute",
                                         width: 150,
                                         height: 150,
                                         cursor: "move",
                                     }}
-                                />
+                                />}
                             </Rnd>
                         )}
                     </div>
