@@ -3,12 +3,35 @@ import { products, backgrounds, views } from "./config";
 import { Sidebar } from "./components/Sidebar";
 import { TopPanel } from "./components/TopPanel";
 import { Rnd } from "react-rnd";
+import { v4 as uuidv4 } from "uuid";
 
 const App = () => {
     const [selectedProduct, setSelectedProduct] = useState('tshirt')
     const [selectedView, setSelectedView] = useState('front')
-    const [frontImage, setFrontImage] = useState(null)
-    const [backImage, setBackImage] = useState(null)
+
+    const [images, setImages] = useState({
+        front: [],
+        back: []
+    })
+
+    const addImage = (view, fileObjOrArray) => {
+        const files = Array.isArray(fileObjOrArray) ? fileObjOrArray : [fileObjOrArray];
+
+        setImages(prev => ({
+            ...prev,
+            [view]: [
+                ...files.map(file => ({
+                    id: crypto.randomUUID(),
+                    src: file.src,
+                    name: file.name,
+                    x: 0,
+                    y: 0,
+                    width: 150,
+                    height: 150
+                }))
+            ]
+        }))
+    }
 
     const selectedBg = backgrounds.find((bg) => bg.type === selectedProduct && bg.view === selectedView)?.image
 
@@ -21,8 +44,8 @@ return (
                     selectedProduct={selectedProduct}
                     selectedView={selectedView}
                     onProductSelect={setSelectedProduct}
-                    onFrontImageSelect={setFrontImage}
-                    onBackImageSelect={setBackImage}
+                    onAddImage={addImage}
+                    images={images}
                 />
             </div>
             <div className="col-span-9">
@@ -42,50 +65,51 @@ return (
                     )}
 
                     <div className="print-area border-dotted border-2 rounded-sm --front absolute z-10">
-                        {frontImage && selectedView === 'front' && (
+                        {images[selectedView].map((img) => (
                             <Rnd
-                                bounds="parent"
+                                key={img.id}
                                 default={{
-                                x: 0,
-                                y: 0,
-                                width: 150,
-                                height: 150,
+                                    x: img.x,
+                                    y: img.y,
+                                    width: img.width,
+                                    height: img.height
+                                }}
+                                bounds="parent"
+                                minWidth={50}
+                                minHeight={50}
+                                onDragStop={(e, d) => {
+                                    // aktualizujeme pozíciu obrázku
+                                    setImages(prev => ({
+                                        ...prev,
+                                        [selectedView]: prev[selectedView].map(i => i.id === img.id ? {...i, x: d.x, y: d.y} : i)
+                                    }))
+                                }}
+                                onResizeStop={(e, direction, ref, delta, position) => {
+                                    // aktualizujeme veľkosť a pozíciu obrázku
+                                    setImages(prev => ({
+                                        ...prev,
+                                        [selectedView]: prev[selectedView].map(i => i.id === img.id ? {
+                                            ...i, 
+                                            width: parseInt(ref.style.width), 
+                                            height: parseInt(ref.style.height),
+                                            ...position
+                                        } : i)
+                                    }))
                                 }}
                             >
-                                {frontImage && <img
-                                    src={frontImage}
-                                    alt="image"
+                                <img
+                                    src={img.src}
+                                    alt={img.name}
                                     style={{
-                                        position: "absolute",
-                                        width: 150,
-                                        height: 150,
-                                        cursor: "move",
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "contain",
+                                    cursor: "move",
                                     }}
-                                />}
+                                />      
                             </Rnd>
-                        )}
-                        {backImage && selectedView === 'back' && (
-                            <Rnd
-                                bounds="parent"
-                                default={{
-                                x: 0,
-                                y: 0,
-                                width: 150,
-                                height: 150,
-                                }}
-                            >
-                                {backImage && <img
-                                    src={backImage}
-                                    alt="image"
-                                    style={{
-                                        position: "absolute",
-                                        width: 150,
-                                        height: 150,
-                                        cursor: "move",
-                                    }}
-                                />}
-                            </Rnd>
-                        )}
+                        ))}
+                   
                     </div>
                 </div>
             </div>

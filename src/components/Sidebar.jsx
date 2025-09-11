@@ -3,15 +3,10 @@ import OptionButton from './OptionButton'
 import FileButton from './FileButton'
 import LogoGenerator from './LogoGenerator'
 
-export const Sidebar = ({products, selectedProduct, onProductSelect, onFrontImageSelect, onBackImageSelect, selectedView}) => {
-  const handleFrontFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) onFrontImageSelect(URL.createObjectURL(file));
-  }
-
-  const handleBacktFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) onBackImageSelect(URL.createObjectURL(file));
+export const Sidebar = ({products, selectedProduct, onProductSelect, onAddImage, selectedView, images}) => {
+  
+  const handleFileChange = (files) => {
+    onAddImage(selectedView, files);
   }
 
   return (
@@ -32,19 +27,14 @@ export const Sidebar = ({products, selectedProduct, onProductSelect, onFrontImag
             </div>
         )}
 
-        {selectedView === 'front' && (
-          <div className='flex flex-col gap-2 mb-4'>
-            <h2 className="text-2xl font-semibold mb-2">Potlač vpredu</h2>
-            <FileButton callback={handleFrontFileChange}/>
-          </div>
-        )}
-
-        {selectedView === 'back' && ( 
-          <div className='flex flex-col gap-2 mb-4'>
-            <h2 className="text-2xl font-semibold mb-2">Potlač vzadu</h2>
-            <FileButton callback={handleBacktFileChange}/>
-          </div>
-        )}
+        <div className='flex flex-col gap-2 mb-4'>
+          <h2 className="text-2xl font-semibold mb-2">{selectedView === 'front' ? "Potlač vpredu" : "Potlač vzadu"}</h2>
+          <FileButton 
+            multiple={true}
+            useDataUrl={false}
+            files={images[selectedView]} 
+            callback={handleFileChange}/>
+        </div>
 
         {/* <div className='flex flex-col gap-2 mb-4'>
           <h2 className="text-2xl font-semibold mb-2">Generovať logo</h2>
