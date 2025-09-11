@@ -3,7 +3,6 @@ import { products, backgrounds, views } from "./config";
 import { Sidebar } from "./components/Sidebar";
 import { TopPanel } from "./components/TopPanel";
 import { Rnd } from "react-rnd";
-import { v4 as uuidv4 } from "uuid";
 
 const App = () => {
     const [selectedProduct, setSelectedProduct] = useState('tshirt')
