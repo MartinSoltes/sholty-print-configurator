@@ -35,11 +35,6 @@ export const Sidebar = ({products, selectedProduct, onProductSelect, onAddImage,
             files={images[selectedView]} 
             callback={handleFileChange}/>
         </div>
-
-        {/* <div className='flex flex-col gap-2 mb-4'>
-          <h2 className="text-2xl font-semibold mb-2">Generovať logo</h2>
-          <LogoGenerator/>
-        </div> */}
     </div>
   )
 }
