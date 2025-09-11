@@ -1,10 +1,10 @@
 export const views = [
     {
-        title: 'Vpredu',
+        title: 'Predná',
         value: 'front'
     },
     {
-        title: 'Vzadu',
+        title: 'Zadná',
         value: 'back'
     }
 ]
@@ -38,21 +38,21 @@ export const backgrounds = [
     {
         type: 'polo',
         view: 'front',
-        image: './assets/bg-polo.jpg'
+        image: './assets/bg-polo-front.jpg'
     },
     {
         type: 'polo',
         view: 'back',
-        image: './assets/bg-polo.jpg'
+        image: './assets/bg-polo-back.jpg'
     },
     {
         type: 'hoodie',
         view: 'front',
-        image: './assets/bg-hoodie.jpg'
+        image: './assets/bg-hoodie-front.jpg'
     },
     {
         type: 'hoodie',
         view: 'back',
-        image: './assets/bg-hoodie.jpg'
+        image: './assets/bg-hoodie-back.jpg'
     }
 ]

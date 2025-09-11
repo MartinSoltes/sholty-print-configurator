@@ -5,43 +5,43 @@
 }
 
 .preview.--tshirt.--front .print-area {
-    top: 21%;
-    left: 15%;
-    width: 23%;
-    height: 63%;
+    top: 17%;
+    left: 25.3%;
+    width: 49%;
+    height: 73%;
 }
 
 .preview.--tshirt.--back .print-area {
-    top: 17%;
-    left: 61.8%;
-    width: 23%;
-    height: 67%;
+    top: 11%;
+    left: 25.7%;
+    width: 48.4%;
+    height: 79%;
 }
 
 .preview.--polo.--front .print-area {
-    top: 35%;
-    left: 16.5%;
-    width: 21.5%;
-    height: 52%;
+    top: 33%;
+    left: 23.5%;
+    width: 52%;
+    height: 58%;
 }
 
 .preview.--polo.--back .print-area {
-    top: 16%;
-    left: 61.8%;
-    width: 21.5%;
-    height: 71%;
+    top: 12%;
+    left: 23.5%;
+    width: 52.6%;
+    height: 79%;
 }
 
 .preview.--hoodie.--front .print-area {
-    top: 40.5%;
-    left: 16%;
-    width: 21.5%;
-    height: 42%;
+    top: 39%;
+    left: 27%;
+    width: 46%;
+    height: 48%;
 }
 
 .preview.--hoodie.--back .print-area {
-    top: 35%;
-    left: 63%;
-    width: 20.5%;
-    height: 47%;
+    top: 33%;
+    left: 27%;
+    width: 46%;
+    height: 53%;
 }
