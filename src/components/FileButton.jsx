@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-const FileButton = ({callback, multiple = false, accept = "image/*", label = "Vyberte obrázok", useDataUrl = true, files = []}) => {
+const FileButton = ({callback, multiple = false, accept = "image/*", label = "Vyberte súbor", useDataUrl = true, files = []}) => {
     const [displayLabel, setDisplayLabel] = useState(label);
 
     // keď sa zmení files, aktualizujeme label

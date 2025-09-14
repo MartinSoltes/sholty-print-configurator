@@ -29,11 +29,16 @@ export const Sidebar = ({products, selectedProduct, onProductSelect, onAddImage,
 
         <div className='flex flex-col gap-2 mb-4'>
           <h2 className="text-2xl font-semibold mb-2">{selectedView === 'front' ? "Potlač vpredu" : "Potlač vzadu"}</h2>
+          <h3 className='text-lg font-semibold mb-1'>Logo / Obrázok</h3>
           <FileButton 
             multiple={true}
             useDataUrl={false}
-            files={images[selectedView]} 
+            files={images[selectedView]}
+            accept=".png, .jpg, .jpeg, .svg" 
             callback={handleFileChange}/>
+            {!images[selectedView].length && 
+              <p className='text-sm text-center italic'>Vyberte jeden alebo viac obrázkov vo formáte .png, .jpg, .jpeg, .svg</p>
+            } 
         </div>
     </div>
   )
