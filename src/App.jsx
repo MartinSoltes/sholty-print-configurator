@@ -63,7 +63,7 @@ return (
                         />
                     )}
 
-                    <div className="print-area border-dotted border-2 rounded-sm --front absolute z-10">
+                    <div className="print-area border-dotted border-2 rounded-sm --front absolute z-10 overflow-hidden">
                         {images[selectedView].map((img) => (
                             <Rnd
                                 key={img.id}

@@ -1,11 +1,2 @@
 @use "./styles/components/preview";
 @use "tailwindcss";
-
-.resize-handle {
-    width: 12px;
-    height: 12px;
-    background: #000;
-    position: absolute;
-    cursor: se-resize;
-    border-radius: 2px;
-}

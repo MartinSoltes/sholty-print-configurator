@@ -30,6 +30,18 @@ export const Sidebar = ({products, selectedProduct, onProductSelect, onAddImage,
         <div className='flex flex-col gap-2 mb-4'>
           <h2 className="text-2xl font-semibold mb-2">{selectedView === 'front' ? "Potlač vpredu" : "Potlač vzadu"}</h2>
           <h3 className='text-lg font-semibold mb-1'>Logo / Obrázok</h3>
+
+          {images[selectedView].length > 0 && (
+            <div className='flex flex-col gap-2 overflow-y-auto mb-2'>
+              {images[selectedView].map((img) => (
+                <div key={img.id} className='bg-slate-800 p-2 rounded flex items-center gap-2'>
+                  <img src={img.src} alt={img.name} className='w-10 h-10 object-cover rounded' />
+                  <span className='text-sm'>{img.name}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
           <FileButton 
             multiple={true}
             useDataUrl={false}

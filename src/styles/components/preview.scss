@@ -40,18 +40,50 @@
             }
         }
     }
+
+    &.--hoodie {
+        &.--front {
+            .print-area {
+                top: 39%;
+                left: 27%;
+                width: 46%;
+                height: 48%;
+            }
+        }
+
+        &.--back {
+            .print-area {
+                top: 33%;
+                left: 27%;
+                width: 46%;
+                height: 53%;
+            }
+        }
+    } 
 }
 
-.preview.--hoodie.--front .print-area {
-    top: 39%;
-    left: 27%;
-    width: 46%;
-    height: 48%;
-}
+.resize-handle {
+    width: 12px;
+    height: 12px;
+    background: #000;
+    position: absolute;
+    cursor: se-resize;
+    border-radius: 2px;
 
-.preview.--hoodie.--back .print-area {
-    top: 33%;
-    left: 27%;
-    width: 46%;
-    height: 53%;
+    &.top-right-handle {
+        top: 6px;
+        right: 6px;
+    }
+    &.bottom-right-handle {
+        bottom: 6px;
+        right: 6px;
+    }
+    &.bottom-left-handle {
+        bottom: 6px;
+        left: 6px;
+    }
+    &.top-left-handle {
+        top: 6px;
+        left: 6px;
+    }
 }
