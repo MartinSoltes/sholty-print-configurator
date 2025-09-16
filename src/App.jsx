@@ -13,6 +13,13 @@ const App = () => {
         back: []
     })
 
+    const [texts, setTexts] = useState({
+        front: [],
+        back: []
+    })
+    const [newText, setNewText] = useState("")
+    const [showTextInput, setShowTextInput] = useState(false)
+
     const addImage = (view, fileObjOrArray) => {
         const files = Array.isArray(fileObjOrArray) ? fileObjOrArray : [fileObjOrArray];
 
@@ -32,6 +39,29 @@ const App = () => {
         }))
     }
 
+    const addText = (view, content) => {
+        if (!content.trim()) return;
+
+        setTexts(prev => ({
+            ...prev,
+            [view]: [
+                ...prev[view],
+                {
+                    id: crypto.randomUUID(),
+                    content,
+                    x: 0,
+                    y: 0,
+                    fontSize: 20,
+                    fontFamily: "Arial",
+                    color: '#000000'
+                }
+            ]
+        }))
+
+        setNewText("")
+        setShowTextInput(false)
+    }
+
     const selectedBg = backgrounds.find((bg) => bg.type === selectedProduct && bg.view === selectedView)?.image
 
 return (
@@ -43,8 +73,14 @@ return (
                     selectedProduct={selectedProduct}
                     selectedView={selectedView}
                     onProductSelect={setSelectedProduct}
-                    onAddImage={addImage}
                     images={images}
+                    onAddImage={addImage}
+                    texts={texts}
+                    newText={newText}
+                    showTextInput={showTextInput}
+                    setShowTextInput={setShowTextInput}
+                    setNewText={setNewText}
+                    onAddText={addText}
                 />
             </div>
             <div className="col-span-9">
@@ -115,7 +151,34 @@ return (
                                 />      
                             </Rnd>
                         ))}
-                   
+
+                        {texts[selectedView].map((text) => (
+                            <Rnd
+                                key={text.id}
+                                default={{
+                                    x: text.x,
+                                    y: text.y,
+                                    width: 200,
+                                    height: text.fontSize + 10
+                                }}
+                                bounds="parent"
+                            >
+                                <div
+                                    style={{
+                                    fontSize: text.fontSize,
+                                    fontFamily: text.fontFamily,
+                                    color: text.color,
+                                    width: "100%",
+                                    height: "100%",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    }}
+                                >
+                                    {text.content}
+                                </div>
+                            </Rnd>
+                        ))}
                     </div>
                 </div>
             </div>

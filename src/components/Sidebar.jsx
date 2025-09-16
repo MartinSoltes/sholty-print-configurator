@@ -1,9 +1,10 @@
 import React from 'react'
 import OptionButton from './OptionButton'
 import FileButton from './FileButton'
+import { Button } from './Button'
 import LogoGenerator from './LogoGenerator'
 
-export const Sidebar = ({products, selectedProduct, onProductSelect, onAddImage, selectedView, images}) => {
+export const Sidebar = ({products, selectedProduct, onProductSelect, onAddImage, selectedView, images, texts, newText, setNewText, showTextInput, setShowTextInput, onAddText}) => {
   
   const handleFileChange = (files) => {
     onAddImage(selectedView, files);
@@ -51,6 +52,39 @@ export const Sidebar = ({products, selectedProduct, onProductSelect, onAddImage,
             {!images[selectedView].length && 
               <p className='text-sm text-center italic'>Vyberte jeden alebo viac obrázkov vo formáte .png, .jpg, .jpeg, .svg</p>
             } 
+
+            <h3 className='text-lg font-semibold mt-4'>Text</h3>
+
+            {texts[selectedView].length > 0 && (
+              <div className='flex flex-col gap-2 mt-2 overflow-y-auto'>
+                {texts[selectedView].map((text) => (
+                  <div key={text.id} className='bg-slate-800 p-2 rounded flex items-center gap-2'>
+                    <span className='text-sm'>{text.content}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {!showTextInput && (
+              <Button onClick={() => setShowTextInput(true)}>Pridať text</Button>
+            )}
+
+            {showTextInput && (
+              <div className='mt-2 flex flex-col gap-2'>
+                <input 
+                  type="text" 
+                  value={newText || ""}
+                  onChange={(e) => setNewText(e.target.value)} 
+                  className='w-full p-2 rounded border border-neutral-600 bg-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400'
+                  placeholder='Zadajte text' 
+                />
+                <Button onClick={() => {
+                  if (newText && newText.trim()) {
+                    onAddText(selectedView, newText.trim());
+                  }
+                }}>Uložiť</Button>
+              </div>
+            )}
         </div>
     </div>
   )
