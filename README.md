@@ -1,12 +1,49 @@
-# React + Vite
+# AI Print Configurator 🎨🤖
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Create custom T-shirt designs with AI-generated slogans and icons.
 
-Currently, two official plugins are available:
+## Features
+- 🧠 AI slogan generator (GPT-4)
+- 🎨 AI image creator (DALL·E 3)
+- 💾 Save designs with Supabase
+- 💰 Stripe subscription system
+- 🚀 Built with Next.js 14, Tailwind, and ShadCN
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech Stack
+Next.js, TypeScript, Tailwind, OpenAI API, Supabase, Stripe
 
-## Expanding the ESLint configuration
+## Demo
+[ai-print.vercel.app](https://ai-print.vercel.app)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Setup
+1. Clone repo
+2. Add `.env.local` with API keys
+3. Run `npm install`
+4. Run `npm run dev`
+                          
+                          
+                          ┌────────────────────--┐
+                          │   Next.js Frontend   │
+                          │ (React + TypeScript  │
+                          │  + Tailwind + ShadCN)│
+                          └─────────┬──────────--┘
+                                    │
+                    ┌───────────────┼────────────────┐
+                    │                                │
+          ┌─────────▼────────┐            ┌──────────▼────────┐
+          │  OpenAI API      │            │  DALL·E 3 (Images)│
+          │ (Text generation)│            │ (Design icons)    │
+          └─────────▲────────┘            └──────────▲────────┘
+                    │                                │
+                    │                                │
+           ┌────────┴─────────┐          ┌───────────┴───────────┐
+           │  Supabase DB     │          │      Stripe API       │
+           │ (Auth, Designs,  │          │ (Payments, Subscriptions)
+           │  AI History)     │          └───────────┬───────────┘
+           └────────▲─────────┘                      │
+                    │                                │
+            ┌───────┴────────┐             ┌─────────▼──────────┐
+            │  Configurator  │             │  Dashboard / Admin  │
+            │ (Canvas, Fonts,│             │ (Manage users, plans)│
+            │  Exports)      │             └─────────────────────┘
+            └────────────────┘
