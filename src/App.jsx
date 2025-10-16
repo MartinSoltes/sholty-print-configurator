@@ -99,7 +99,7 @@ return (
                         />
                     )}
 
-                    <div className="print-area border-dotted border-2 rounded-sm --front absolute z-10 overflow-hidden">
+                    <div className="print-area --front absolute z-10 overflow-hidden">
                         {images[selectedView].map((img) => (
                             <Rnd
                                 key={img.id}
@@ -118,7 +118,7 @@ return (
                                     bottomLeft: <div className="resize-handle bottom-left-handle" />,
                                     topLeft: <div className="resize-handle top-left-handle" />
                                 }}
-                                style={{ border: "1px solid #666", background: "rgba(255, 255, 255, 0.7)" }}
+                                className="print-element"
                                 onDragStop={(e, d) => {
                                     // aktualizujeme pozíciu obrázku
                                     setImages(prev => ({
@@ -161,7 +161,14 @@ return (
                                     width: 200,
                                     height: text.fontSize + 10
                                 }}
+                                resizeHandleComponent={{
+                                    topRight: <div className="resize-handle top-right-handle" />,
+                                    bottomRight: <div className="resize-handle bottom-right-handle" />,
+                                    bottomLeft: <div className="resize-handle bottom-left-handle" />,
+                                    topLeft: <div className="resize-handle top-left-handle" />
+                                }}
                                 bounds="parent"
+                                className="print-element"
                             >
                                 <div
                                     style={{

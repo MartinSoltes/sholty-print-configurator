@@ -69,6 +69,8 @@
     position: absolute;
     cursor: se-resize;
     border-radius: 2px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 
     &.top-right-handle {
         top: 6px;
@@ -85,5 +87,18 @@
     &.top-left-handle {
         top: 6px;
         left: 6px;
+    }
+}
+
+.print-element {
+    border: 1px solid transparent;
+    transition: border 0.3s ease;
+    
+    &:hover {
+        border: 1px solid #666;
+
+        .resize-handle {
+            opacity: 1;
+        }
     }
 }
