@@ -58,8 +58,9 @@ export const Sidebar = ({products, selectedProduct, onProductSelect, onAddImage,
             {texts[selectedView].length > 0 && (
               <div className='flex flex-col gap-2 mt-2 overflow-y-auto'>
                 {texts[selectedView].map((text) => (
-                  <div key={text.id} className='bg-slate-800 p-2 rounded flex items-center gap-2'>
+                  <div key={text.id} className='bg-slate-800 p-2 rounded flex justify-between gap-2'>
                     <span className='text-sm'>{text.content}</span>
+                    <button title="Upraviť text" className='cursor-pointer w-[24px] text-center'>•••</button>
                   </div>
                 ))}
               </div>
