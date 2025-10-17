@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { FileInfo } from "@/types";
+import { useTranslation } from "@/context/TranslationContext";
 
 interface FileButtonProps {
   /** Called whenever files are selected. */
@@ -20,22 +21,24 @@ const FileButton: React.FC<FileButtonProps> = ({
   callback,
   multiple = false,
   accept = "image/*",
-  label = "Vyberte súbor",
+  label,
   useDataUrl = true,
   files = [],
 }) => {
-  const [displayLabel, setDisplayLabel] = useState(label);
+  const { t } = useTranslation();
+  const defaultLabel = label || t("selectFile");
+  const [displayLabel, setDisplayLabel] = useState(defaultLabel);
 
   // 🧠 Update label text when file list changes
   useEffect(() => {
     if (!files || files.length === 0) {
-      setDisplayLabel(label);
+      setDisplayLabel(defaultLabel);
     } else if (files.length === 1) {
-      setDisplayLabel(files[0].name || label);
+      setDisplayLabel(files[0].name || defaultLabel);
     } else {
-      setDisplayLabel(`${files.length} súborov vybraných`);
+      setDisplayLabel(`${files.length} ${t("filesSelected")}`);
     }
-  }, [files, label]);
+  }, [files, defaultLabel, t]);
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = Array.from(e.target.files || []);
@@ -73,7 +76,7 @@ const FileButton: React.FC<FileButtonProps> = ({
         // ⚠️ Revoke URLs on unmount to avoid memory leaks
         results.forEach(({ src }) => {
           const url = src;
-          setTimeout(() => URL.revokeObjectURL(url), 60_000); // revoke after 1min
+          setTimeout(() => URL.revokeObjectURL(url), 60_000);
         });
       }
 
@@ -81,7 +84,6 @@ const FileButton: React.FC<FileButtonProps> = ({
     } catch (error) {
       console.error("Error reading files", error);
     } finally {
-      // Reset the input to allow re-selecting the same file
       e.target.value = "";
     }
   };
@@ -92,11 +94,11 @@ const FileButton: React.FC<FileButtonProps> = ({
         hover:bg-indigo-500 hover:text-white hover:border-indigo-500
         focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-neutral-700
         transition-all duration-200 cursor-pointer ${
-          displayLabel !== label
+          displayLabel !== defaultLabel
             ? "bg-indigo-600 active:border-indigo-600"
             : "bg-neutral-100 text-neutral-900 font-medium"
         }`}
-      aria-label={label}
+      aria-label={defaultLabel}
     >
       <input
         type="file"

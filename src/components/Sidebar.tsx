@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import OptionButton from "./OptionButton";
 import FileButton from "./FileButton";
 import { Button } from "./Button";
 import { Product, DesignImage, ImageItem, TextItem } from "@/types";
+import { useTranslation } from "@/context/TranslationContext";
 
 interface SidebarProps {
   products: Product[];
@@ -23,7 +24,9 @@ interface SidebarProps {
   showTextInput: boolean;
   setShowTextInput: (value: boolean) => void;
   onAddText: (view: "front" | "back", content: string) => void;
-  onGenerateAI?: (topic: string) => Promise<string[]>;
+  onGenerateAI: (topic: string) => Promise<void>;
+  aiResults: string[];
+  aiLoading: boolean;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -38,8 +41,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
   setNewText,
   showTextInput,
   setShowTextInput,
-  onAddText
+  onAddText,
+  onGenerateAI,
+  aiResults,
+  aiLoading,
 }) => {
+  const { t, lang, setLang } = useTranslation();
+  const [aiTopic, setAiTopic] = useState("");
+
   const handleFileChange = (files: { name: string; src: string; file: File }[]) => {
     const preparedImages = files.map((file) => ({
       id: crypto.randomUUID(),
@@ -59,7 +68,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <div className="bg-slate-950 h-full text-white p-4">
       {products && (
         <div className="flex flex-col gap-2 mb-6">
-          <h2 className="text-2xl font-semibold mb-2">Produkt</h2>
+          <h2 className="text-2xl font-semibold mb-2 flex justify-between items-center">
+            {t("product")}
+            <select
+              value={lang}
+              onChange={(e) => setLang(e.target.value as "sk" | "en")}
+              className="text-sm bg-slate-800 text-white border border-neutral-600 rounded p-1"
+            >
+              <option value="sk">SK</option>
+              <option value="en">EN</option>
+            </select>
+          </h2>
 
           {products.map((product, index) => (
             <OptionButton
@@ -76,10 +95,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       <div className="flex flex-col gap-2 mb-4">
         <h2 className="text-2xl font-semibold mb-2">
-          {selectedView === "front" ? "Potlač vpredu" : "Potlač vzadu"}
+          {selectedView === "front" ? t("frontPrint") : t("backPrint")}
         </h2>
 
-        <h3 className="text-lg font-semibold mb-1">Logo / Obrázok</h3>
+        <h3 className="text-lg font-semibold mb-1">{t("logoOrImage")}</h3>
 
         {images[selectedView].length > 0 && (
           <div className="flex flex-col gap-2 overflow-y-auto mb-2">
@@ -108,12 +127,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
         />
 
         {!images[selectedView].length && (
-          <p className="text-sm text-center italic">
-            Vyberte jeden alebo viac obrázkov vo formáte .png, .jpg, .jpeg, .svg
-          </p>
+          <p className="text-sm text-center italic">{t("selectImagesHint")}</p>
         )}
 
-        <h3 className="text-lg font-semibold mt-4">Text</h3>
+        <h3 className="text-lg font-semibold mt-4">{t("textSection")}</h3>
 
         {texts[selectedView].length > 0 && (
           <div className="flex flex-col gap-2 mt-2 overflow-y-auto">
@@ -129,7 +146,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         )}
 
         {!showTextInput && (
-          <Button onClick={() => setShowTextInput(true)}>Pridať text</Button>
+          <Button onClick={() => setShowTextInput(true)}>
+            {t("addText")}
+          </Button>
         )}
 
         {showTextInput && (
@@ -139,7 +158,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               value={newText || ""}
               onChange={(e) => setNewText(e.target.value)}
               className="w-full p-2 rounded border border-neutral-600 bg-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
-              placeholder="Zadajte text"
+              placeholder={t("enterText")}
             />
             <Button
               onClick={() => {
@@ -148,8 +167,37 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }
               }}
             >
-              Uložiť
+              {t("save")}
             </Button>
+          </div>
+        )}
+
+        <hr className="my-4 border-neutral-700" />
+
+        <h3 className="text-lg font-semibold mb-2">{t("aiIdeas")}</h3>
+        <input
+          type="text"
+          value={aiTopic}
+          onChange={(e) => setAiTopic(e.target.value)}
+          placeholder={t("enterTopic")}
+          className="w-full p-2 mb-2 rounded border border-neutral-600 bg-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        />
+
+        <Button onClick={() => onGenerateAI(aiTopic)}>
+          {aiLoading ? t("generating") : t("generate")}
+        </Button>
+
+        {aiResults.length > 0 && (
+          <div className="mt-3 flex flex-col gap-2">
+            {aiResults.map((slogan, i) => (
+              <button
+                key={i}
+                onClick={() => onAddText(selectedView, slogan)}
+                className="text-left p-2 rounded bg-slate-800 hover:bg-indigo-600 transition"
+              >
+                {slogan}
+              </button>
+            ))}
           </div>
         )}
       </div>

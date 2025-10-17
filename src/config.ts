@@ -1,30 +1,16 @@
 import { Product } from "@/types";
+import sk from "@/locales/sk.json";
 
-export const views = [
-    {
-        label: 'Predná',
-        value: 'front'
-    },
-    {
-        label: 'Zadná',
-        value: 'back'
-    }
-]
+export const getViews = (t: (key: keyof typeof sk) => string) => [
+  { label: t("frontSide"), value: "front" as const },
+  { label: t("backSide"), value: "back" as const }
+];
 
-export const products: Product[] = [
-    {
-        label: 'Tricko',
-        value: 'tshirt'
-    },
-    {
-        label: 'Polo',
-        value: 'polo'
-    },
-    {
-        label: 'Mikina',
-        value: 'hoodie'
-    }
-]
+export const getProducts = (t: (key: keyof typeof sk) => string): Product[] => [
+  { label: t("tshirt"), value: "tshirt" },
+  { label: t("polo"), value: "polo" },
+  { label: t("hoodie"), value: "hoodie" },
+];
 
 export const backgrounds = [
     {
