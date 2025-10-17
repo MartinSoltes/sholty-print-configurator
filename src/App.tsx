@@ -4,32 +4,8 @@ import html2canvas from "html2canvas";
 import { products, backgrounds, views } from "./config";
 import { Sidebar } from "./components/Sidebar";
 import { TopPanel } from "./components/TopPanel";
+import { DesignImage, DesignText, DesignViews } from "./types";
 
-// --- 🧱 Type Definitions ---
-interface DesignImage {
-  id: string;
-  src: string;
-  name: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-interface DesignText {
-  id: string;
-  content: string;
-  x: number;
-  y: number;
-  fontSize: number;
-  fontFamily: string;
-  color: string;
-}
-
-interface DesignViews<T> {
-  front: T[];
-  back: T[];
-}
 
 // --- 🧠 Main Component ---
 const App: React.FC = () => {
@@ -51,29 +27,32 @@ const App: React.FC = () => {
   const previewRef = useRef<HTMLDivElement>(null);
 
   // --- 🧠 Future AI integration placeholder ---
-  const generateAISlogans = async (topic: string) => {
-    console.log("Generate AI slogans for:", topic);
-    // Example later:
-    // const response = await fetch("/api/generate-slogan", { method: "POST", body: JSON.stringify({ topic }) });
+  const handleGenerateAI = async (topic: string): Promise<string[]> => {
+    try {
+      const res = await fetch("http://localhost:5050/api/generate-slogan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ topic }),
+      });
+
+      const data = await res.json();
+      return data.slogans || []; // ✅ return the array
+    } catch (error) {
+      console.error("AI generation failed:", error);
+      return []; // ✅ still return string[] even on error
+    }
   };
 
-  // --- 🖼️ Add Image ---
-  const addImage = (
-    view: "front" | "back",
-    fileObjOrArray: { src: string; name: string } | { src: string; name: string }[]
-  ) => {
-    const files = Array.isArray(fileObjOrArray)
-      ? fileObjOrArray
-      : [fileObjOrArray];
 
+  // --- 🖼️ Add Image ---
+  const addImage = (view: "front" | "back", files: DesignImage[]) => {
     setImages((prev) => ({
       ...prev,
       [view]: [
         ...prev[view],
-        ...files.map((file) => ({
+        ...files.map((f) => ({
+          ...f,
           id: crypto.randomUUID(),
-          src: file.src,
-          name: file.name,
           x: 0,
           y: 0,
           width: 150,
@@ -82,6 +61,8 @@ const App: React.FC = () => {
       ],
     }));
   };
+
+
 
   // --- ✏️ Add Text ---
   const addText = (view: "front" | "back", content: string) => {
@@ -148,7 +129,7 @@ const App: React.FC = () => {
             setShowTextInput={setShowTextInput}
             setNewText={setNewText}
             onAddText={addText}
-            onGenerateAI={generateAISlogans}
+            onGenerateAI={handleGenerateAI}
           />
         </div>
 

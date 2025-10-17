@@ -1,25 +1,25 @@
 export const views = [
     {
-        title: 'Predná',
+        label: 'Predná',
         value: 'front'
     },
     {
-        title: 'Zadná',
+        label: 'Zadná',
         value: 'back'
     }
 ]
 
 export const products = [
     {
-        title: 'Tricko',
+        label: 'Tricko',
         value: 'tshirt'
     },
     {
-        title: 'Polo',
+        label: 'Polo',
         value: 'polo'
     },
     {
-        title: 'Mikina',
+        label: 'Mikina',
         value: 'hoodie'
     }
 ]

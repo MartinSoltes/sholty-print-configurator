@@ -6,7 +6,7 @@ const OptionButton = ({option, name, type = 'checkbox', checked, onChange}) => {
              hover:bg-indigo-500 hover:text-white hover:border-indigo-500  
              focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-neutral-700
              transition-all duration-200 cursor-pointer + ${checked ? "bg-indigo-600 active:border-indigo-600" : "bg-neutral-100 text-neutral-900 font-medium" }`}>
-            {option.title}
+            {option.label}
             <input className='opacity-0 w-0 h-0'
                 type={type} 
                 name={option.name} 

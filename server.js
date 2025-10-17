@@ -18,13 +18,16 @@ const openai = new OpenAI({
 app.post("/api/generate-slogan", async (req, res) => {
   try {
     const { topic } = req.body;
+    console.log("📩 Received topic:", topic);
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4o-mini", // ✅ Cheapest, fast, high quality
       messages: [
-        { role: "system", content: "You generate short, catchy slogans for T-shirts." },
-        { role: "user", content: `Generate 5 creative slogans about ${topic}.` },
+        { role: "system", content: "You are a creative slogan generator for T-shirts." },
+        { role: "user", content: `Generate 5 short, catchy slogans about ${topic}.` },
       ],
+      max_tokens: 100, // ✅ keeps costs under control
+      temperature: 0.9, // more creative output
     });
 
     const text = completion.choices[0]?.message?.content || "";
@@ -35,8 +38,8 @@ app.post("/api/generate-slogan", async (req, res) => {
 
     res.json({ slogans });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "AI generation failed." });
+    console.error("❌ Error generating slogans:", error.response?.data || error.message);
+    res.status(500).json({ error: error.message || "AI generation failed." });
   }
 });
 
