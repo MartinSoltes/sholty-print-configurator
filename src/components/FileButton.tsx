@@ -1,12 +1,19 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
+import { FileInfo } from "@/types";
 
-export interface FileButtonProps {
-  callback: (files: { name: string; src: string; file: File }[]) => void;
+interface FileButtonProps {
+  /** Called whenever files are selected. */
+  callback: (files: FileInfo[]) => void;
+  /** Allow multiple file selection */
   multiple?: boolean;
+  /** Accepted MIME types (default: images only) */
   accept?: string;
+  /** Default button label */
   label?: string;
+  /** If true, reads files as Base64; if false, creates blob URLs */
   useDataUrl?: boolean;
-  files?: { name: string; src: string }[];
+  /** Optional list of current files, used for label updates */
+  files?: Pick<FileInfo, "name" | "src">[];
 }
 
 const FileButton: React.FC<FileButtonProps> = ({
@@ -19,7 +26,7 @@ const FileButton: React.FC<FileButtonProps> = ({
 }) => {
   const [displayLabel, setDisplayLabel] = useState(label);
 
-  // Update label when file list changes
+  // 🧠 Update label text when file list changes
   useEffect(() => {
     if (!files || files.length === 0) {
       setDisplayLabel(label);
@@ -32,37 +39,50 @@ const FileButton: React.FC<FileButtonProps> = ({
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = Array.from(e.target.files || []);
-    if (selectedFiles.length === 0) return;
+    if (!selectedFiles.length) return;
 
     try {
+      let results: FileInfo[];
+
       if (useDataUrl) {
-        // Convert each file to a base64 data URL
-        const results = await Promise.all(
+        // Convert to Base64 data URLs
+        results = await Promise.all(
           selectedFiles.map(
             (file) =>
-              new Promise<{ name: string; src: string; file: File }>(
-                (resolve, reject) => {
-                  const reader = new FileReader();
-                  reader.onload = () =>
-                    resolve({ name: file.name, src: reader.result as string, file });
-                  reader.onerror = reject;
-                  reader.readAsDataURL(file);
-                }
-              )
+              new Promise<FileInfo>((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () =>
+                  resolve({
+                    name: file.name,
+                    src: reader.result as string,
+                    file,
+                  });
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+              })
           )
         );
-        callback(results);
       } else {
-        // Use object URLs for faster preview
-        const results = selectedFiles.map((file) => ({
+        // Create object URLs for quick preview
+        results = selectedFiles.map((file) => ({
           name: file.name,
           src: URL.createObjectURL(file),
           file,
         }));
-        callback(results);
+
+        // ⚠️ Revoke URLs on unmount to avoid memory leaks
+        results.forEach(({ src }) => {
+          const url = src;
+          setTimeout(() => URL.revokeObjectURL(url), 60_000); // revoke after 1min
+        });
       }
+
+      callback(results);
     } catch (error) {
       console.error("Error reading files", error);
+    } finally {
+      // Reset the input to allow re-selecting the same file
+      e.target.value = "";
     }
   };
 

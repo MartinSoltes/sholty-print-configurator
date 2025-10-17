@@ -1,6 +1,23 @@
 import React from 'react'
 
-const OptionButton = ({option, name, type = 'checkbox', checked, onChange}) => {
+interface OptionButtonProps {
+  name: string;
+  option: {
+    label: string;
+    value: string;
+  };
+  type: "radio" | "checkbox";
+  checked: boolean;
+  onChange: (value: string) => void;
+}
+
+const OptionButton: React.FC<OptionButtonProps> = ({
+  name,
+  option,
+  type,
+  checked,
+  onChange,
+}) => {
     return (
         <label className={`flex justify-center items-center w-full p-2 rounded-md border-2 border-neutral-500 shadow-sm
              hover:bg-indigo-500 hover:text-white hover:border-indigo-500  
@@ -9,7 +26,7 @@ const OptionButton = ({option, name, type = 'checkbox', checked, onChange}) => {
             {option.label}
             <input className='opacity-0 w-0 h-0'
                 type={type} 
-                name={option.name} 
+                name={option.label} 
                 value={option.value} 
                 id={option.value} 
                 checked={checked}

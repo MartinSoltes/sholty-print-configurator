@@ -2,12 +2,7 @@ import React from "react";
 import OptionButton from "./OptionButton";
 import FileButton from "./FileButton";
 import { Button } from "./Button";
-import { ImageItem, TextItem, DesignImage } from "../types";
-
-interface Product {
-  label: string;
-  value: string;
-}
+import { Product, DesignImage, ImageItem, TextItem } from "@/types";
 
 interface SidebarProps {
   products: Product[];

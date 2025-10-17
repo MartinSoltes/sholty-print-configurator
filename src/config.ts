@@ -1,3 +1,5 @@
+import { Product } from "@/types";
+
 export const views = [
     {
         label: 'Predná',
@@ -9,7 +11,7 @@ export const views = [
     }
 ]
 
-export const products = [
+export const products: Product[] = [
     {
         label: 'Tricko',
         value: 'tshirt'

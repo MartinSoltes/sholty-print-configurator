@@ -1,6 +1,18 @@
 import React from 'react'
 
-export const Button = ({children, type = "button", onClick, className = ""}) => {
+interface ButtonProps {
+  children: React.ReactNode;
+  type?: "button" | "submit" | "reset";
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  className?: string;
+}
+
+export const Button: React.FC<ButtonProps> = ({
+  children,
+  type = "button",
+  onClick,
+  className = "",
+}) => {
   return (
     <button 
         type={type}

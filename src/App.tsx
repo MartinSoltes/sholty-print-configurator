@@ -4,27 +4,23 @@ import html2canvas from "html2canvas";
 import { products, backgrounds, views } from "./config";
 import { Sidebar } from "./components/Sidebar";
 import { TopPanel } from "./components/TopPanel";
-import { DesignImage, DesignText, DesignViews } from "./types";
-
+import { useDesignElements } from "@/hooks/useDesignElements";
 
 // --- 🧠 Main Component ---
 const App: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<string>("tshirt");
   const [selectedView, setSelectedView] = useState<"front" | "back">("front");
-
-  const [images, setImages] = useState<DesignViews<DesignImage>>({
-    front: [],
-    back: [],
-  });
-
-  const [texts, setTexts] = useState<DesignViews<DesignText>>({
-    front: [],
-    back: [],
-  });
-
   const [newText, setNewText] = useState<string>("");
   const [showTextInput, setShowTextInput] = useState<boolean>(false);
   const previewRef = useRef<HTMLDivElement>(null);
+  const {
+    images,
+    texts,
+    handleAddImage,
+    handleAddText,
+    updateImage,
+    updateText,
+  } = useDesignElements();
 
   // --- 🧠 Future AI integration placeholder ---
   const handleGenerateAI = async (topic: string): Promise<string[]> => {
@@ -41,51 +37,6 @@ const App: React.FC = () => {
       console.error("AI generation failed:", error);
       return []; // ✅ still return string[] even on error
     }
-  };
-
-
-  // --- 🖼️ Add Image ---
-  const addImage = (view: "front" | "back", files: DesignImage[]) => {
-    setImages((prev) => ({
-      ...prev,
-      [view]: [
-        ...prev[view],
-        ...files.map((f) => ({
-          ...f,
-          id: crypto.randomUUID(),
-          x: 0,
-          y: 0,
-          width: 150,
-          height: 150,
-        })),
-      ],
-    }));
-  };
-
-
-
-  // --- ✏️ Add Text ---
-  const addText = (view: "front" | "back", content: string) => {
-    if (!content.trim()) return;
-
-    setTexts((prev) => ({
-      ...prev,
-      [view]: [
-        ...prev[view],
-        {
-          id: crypto.randomUUID(),
-          content,
-          x: 0,
-          y: 0,
-          fontSize: 20,
-          fontFamily: "Arial",
-          color: "#000000",
-        },
-      ],
-    }));
-
-    setNewText("");
-    setShowTextInput(false);
   };
 
   // --- 💾 Export Functionality ---
@@ -122,13 +73,13 @@ const App: React.FC = () => {
             selectedView={selectedView}
             onProductSelect={setSelectedProduct}
             images={images}
-            onAddImage={addImage}
+            onAddImage={handleAddImage}
             texts={texts}
             newText={newText}
             showTextInput={showTextInput}
             setShowTextInput={setShowTextInput}
             setNewText={setNewText}
-            onAddText={addText}
+            onAddText={handleAddText}
             onGenerateAI={handleGenerateAI}
           />
         </div>
@@ -174,27 +125,14 @@ const App: React.FC = () => {
                   minHeight={50}
                   className="print-element"
                   onDragStop={(_, d) =>
-                    setImages((prev) => ({
-                      ...prev,
-                      [selectedView]: prev[selectedView].map((i) =>
-                        i.id === img.id ? { ...i, x: d.x, y: d.y } : i
-                      ),
-                    }))
+                    updateImage(selectedView, img.id, { x: d.x, y: d.y })
                   }
                   onResizeStop={(_, __, ref, ___, position) =>
-                    setImages((prev) => ({
-                      ...prev,
-                      [selectedView]: prev[selectedView].map((i) =>
-                        i.id === img.id
-                          ? {
-                              ...i,
-                              width: parseInt(ref.style.width),
-                              height: parseInt(ref.style.height),
-                              ...position,
-                            }
-                          : i
-                      ),
-                    }))
+                    updateImage(selectedView, img.id, {
+                      width: parseInt(ref.style.width),
+                      height: parseInt(ref.style.height),
+                      ...position,
+                    })
                   }
                 >
                   <img
