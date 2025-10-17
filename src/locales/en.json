@@ -21,5 +21,7 @@
   "backSide": "Back side",
   "tshirt": "T-shirt",
   "polo": "Polo shirt",
-  "hoodie": "Hoodie"
+  "hoodie": "Hoodie",
+  "undo": "Undo",
+  "redo": "Redo"
 }

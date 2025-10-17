@@ -21,5 +21,7 @@
   "backSide": "Zadná strana",
   "tshirt": "Tričko",
   "polo": "Polo tričko",
-  "hoodie": "Mikina"
+  "hoodie": "Mikina",
+  "undo": "Späť",
+  "redo": "Dopredu"
 }

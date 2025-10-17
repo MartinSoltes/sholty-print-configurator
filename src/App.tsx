@@ -18,14 +18,7 @@ const App: React.FC = () => {
   const [newText, setNewText] = useState<string>("");
   const [showTextInput, setShowTextInput] = useState<boolean>(false);
   const previewRef = useRef<HTMLDivElement>(null);
-  const {
-    images,
-    texts,
-    handleAddImage,
-    handleAddText,
-    updateImage,
-    updateText,
-  } = useDesignElements();
+  const { images, texts, handleAddImage, handleAddText, updateImage, updateText, undo, redo, canUndo, canRedo } = useDesignElements();
   const [aiResults, setAiResults] = useState<string[]>([]);
   const [aiLoading, setAiLoading] = useState(false);
 
@@ -90,17 +83,12 @@ const App: React.FC = () => {
           selectedView={selectedView}
           views={views}
           onViewSelect={setSelectedView}
+          onExport={handleExport}
+          onUndo={undo}
+          onRedo={redo}
+          canUndo={canUndo}
+          canRedo={canRedo}
         />
-
-        <div className="flex items-center justify-between p-4">
-          <h2 className="text-3xl font-bold">{t("productPreview")}</h2>
-          <button
-            onClick={handleExport}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition"
-          >
-            {t("exportDesign")}
-          </button>
-        </div>
 
         <div
           id="tshirt-canvas"

@@ -1,37 +1,34 @@
-import { useState } from "react";
-import { DesignImage, DesignText, DesignViews } from "@/types";
+import { useHistory } from "@/hooks/useHistory";
+import { DesignViews, DesignImage, DesignText } from "@/types";
 
 /**
- * Custom hook for managing design elements (images + texts)
- * across product views (front/back).
+ * Custom hook to manage design elements (images & texts)
+ * with built-in undo/redo history tracking.
  */
-export const useDesignElements = () => {
-  const [images, setImages] = useState<DesignViews<DesignImage>>({
-    front: [],
-    back: [],
+export function useDesignElements() {
+  const { present, set, undo, redo, canUndo, canRedo, reset } = useHistory<{
+    images: DesignViews<DesignImage>;
+    texts: DesignViews<DesignText>;
+  }>({
+    images: { front: [], back: [] },
+    texts: { front: [], back: [] },
   });
 
-  const [texts, setTexts] = useState<DesignViews<DesignText>>({
-    front: [],
-    back: [],
-  });
+  const { images, texts } = present;
 
-  /**
-   * Add new uploaded images to the selected view
-   */
+  // --- 🖼️ Add new images ---
   const handleAddImage = (view: "front" | "back", files: DesignImage[]) => {
-    setImages((prev) => ({
-      ...prev,
-      [view]: [...prev[view], ...files],
-    }));
+    set({
+      ...present,
+      images: {
+        ...images,
+        [view]: [...images[view], ...files],
+      },
+    });
   };
 
-  /**
-   * Add new text element to the selected view
-   */
+  // --- 🔤 Add new text ---
   const handleAddText = (view: "front" | "back", content: string) => {
-    if (!content.trim()) return;
-
     const newText: DesignText = {
       id: crypto.randomUUID(),
       content,
@@ -41,43 +38,55 @@ export const useDesignElements = () => {
       fontFamily: "Arial",
       color: "#000000",
     };
-
-    setTexts((prev) => ({
-      ...prev,
-      [view]: [...prev[view], newText],
-    }));
+    set({
+      ...present,
+      texts: {
+        ...texts,
+        [view]: [...texts[view], newText],
+      },
+    });
   };
 
-  /**
-   * Update an image (position, size, etc.) after drag/resize
-   */
+  // --- 🔄 Update image properties (position, size, etc.) ---
   const updateImage = (
     view: "front" | "back",
     id: string,
-    updatedData: Partial<DesignImage>
+    updates: Partial<DesignImage>
   ) => {
-    setImages((prev) => ({
-      ...prev,
-      [view]: prev[view].map((img) =>
-        img.id === id ? { ...img, ...updatedData } : img
-      ),
-    }));
+    set({
+      ...present,
+      images: {
+        ...images,
+        [view]: images[view].map((img) =>
+          img.id === id ? { ...img, ...updates } : img
+        ),
+      },
+    });
   };
 
-  /**
-   * Update a text element (position, style, etc.)
-   */
+  // --- ✏️ Update text properties (position, style, etc.) ---
   const updateText = (
     view: "front" | "back",
     id: string,
-    updatedData: Partial<DesignText>
+    updates: Partial<DesignText>
   ) => {
-    setTexts((prev) => ({
-      ...prev,
-      [view]: prev[view].map((txt) =>
-        txt.id === id ? { ...txt, ...updatedData } : txt
-      ),
-    }));
+    set({
+      ...present,
+      texts: {
+        ...texts,
+        [view]: texts[view].map((txt) =>
+          txt.id === id ? { ...txt, ...updates } : txt
+        ),
+      },
+    });
+  };
+
+  // --- 🧹 Reset all elements ---
+  const resetDesign = () => {
+    reset({
+      images: { front: [], back: [] },
+      texts: { front: [], back: [] },
+    });
   };
 
   return {
@@ -87,7 +96,10 @@ export const useDesignElements = () => {
     handleAddText,
     updateImage,
     updateText,
-    setImages,
-    setTexts,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
+    resetDesign,
   };
-};
+}
