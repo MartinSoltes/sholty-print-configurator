@@ -103,35 +103,51 @@ const App: React.FC = () => {
             {images[selectedView].map((img) => (
               <Rnd
                 key={img.id}
-                default={{
-                  x: img.x,
-                  y: img.y,
-                  width: img.width,
-                  height: img.height,
+                size={{
+                  width: img.width || 100,
+                  height: img.height || 100,
+                }}
+                position={{
+                  x: img.x || 0,
+                  y: img.y || 0,
                 }}
                 bounds="parent"
                 minWidth={50}
                 minHeight={50}
                 className="print-element"
-                onDragStop={(_, d) =>
-                  updateImage(selectedView, img.id, { x: d.x, y: d.y })
-                }
-                onResizeStop={(_, __, ref, ___, position) =>
+                enableResizing={{
+                  top: false,
+                  right: true,
+                  bottom: true,
+                  left: false,
+                  topRight: true,
+                  bottomRight: true,
+                  bottomLeft: true,
+                  topLeft: true,
+                }}
+                onDragStop={(_, d) => {
+                  updateImage(selectedView, img.id, { x: d.x, y: d.y });
+                }}
+                onResizeStop={(_, __, ref, ___, position) => {
+                  const newWidth = parseFloat(ref.style.width);
+                  const newHeight = parseFloat(ref.style.height);
                   updateImage(selectedView, img.id, {
-                    width: parseInt(ref.style.width),
-                    height: parseInt(ref.style.height),
+                    width: newWidth,
+                    height: newHeight,
                     ...position,
-                  })
-                }
+                  });
+                }}
               >
                 <img
                   src={img.src}
                   alt={img.name}
+                  draggable={false}
                   style={{
                     width: "100%",
                     height: "100%",
                     objectFit: "contain",
                     cursor: "move",
+                    userSelect: "none",
                   }}
                 />
               </Rnd>
