@@ -3,7 +3,7 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    max-width: 920px;
+    max-width: 800px;
 
     &.--tshirt {
         &.--front {

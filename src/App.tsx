@@ -7,6 +7,8 @@ import { TopPanel } from "./components/TopPanel";
 import { useDesignElements } from "@/hooks/useDesignElements";
 import { fetchSlogans } from "@/api/ai";
 import { useTranslation } from "@/context/TranslationContext";
+import { useColors } from "@/hooks/useColors";
+import type { ColorVariant } from "@/hooks/useColors";
 
 // --- 🧠 Main Component ---
 const App: React.FC = () => {
@@ -15,6 +17,8 @@ const App: React.FC = () => {
   const products = getProducts(t);
   const [selectedProduct, setSelectedProduct] = useState<string>("tshirt");
   const [selectedView, setSelectedView] = useState<"front" | "back">("front");
+  const [selectedColor, setSelectedColor] = useState<ColorVariant | null>(null);
+  const colors = useColors(selectedProduct);
   const [newText, setNewText] = useState<string>("");
   const [showTextInput, setShowTextInput] = useState<boolean>(false);
   const previewRef = useRef<HTMLDivElement>(null);
@@ -49,9 +53,13 @@ const App: React.FC = () => {
 
   // --- 🌆 Select background ---
   const selectedBg =
-    backgrounds.find(
-      (bg) => bg.type === selectedProduct && bg.view === selectedView
-    )?.image ?? "";
+  selectedColor
+    ? selectedView === "front"
+      ? selectedColor.front
+      : selectedColor.back
+    : backgrounds.find(
+        (bg) => bg.type === selectedProduct && bg.view === selectedView
+      )?.image ?? "";
 
   // --- 🧩 Render ---
   return (
@@ -74,6 +82,9 @@ const App: React.FC = () => {
           onGenerateAI={handleGenerateAI}
           aiResults={aiResults}
           aiLoading={aiLoading}
+          colors={colors}
+          selectedColor={selectedColor}
+          onColorSelect={setSelectedColor}
         />
       </div>
 

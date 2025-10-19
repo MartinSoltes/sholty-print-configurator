@@ -16,12 +16,12 @@ export const backgrounds = [
     {
         type: 'tshirt',
         view: 'front',
-        image: './assets/bg-tshirt-front.jpg'
+        image: './assets/backgrounds/tshirt/white/front.jpg'
     },
     {
         type: 'tshirt',
         view: 'back',
-        image: './assets/bg-tshirt-back.jpg'
+        image: './assets/backgrounds/tshirt/white/back.jpg'
     },
     {
         type: 'polo',

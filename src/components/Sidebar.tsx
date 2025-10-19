@@ -4,6 +4,8 @@ import FileButton from "./FileButton";
 import { Button } from "./Button";
 import { Product, DesignImage, ImageItem, TextItem } from "@/types";
 import { useTranslation } from "@/context/TranslationContext";
+import { ColorVariant } from "@/hooks/useColors";
+import { ColorPicker } from "./ColorPicker";
 
 interface SidebarProps {
   products: Product[];
@@ -27,6 +29,10 @@ interface SidebarProps {
   onGenerateAI: (topic: string) => Promise<void>;
   aiResults: string[];
   aiLoading: boolean;
+  colors: ColorVariant[];
+  selectedColor: ColorVariant | null;
+  onColorSelect: (color: ColorVariant) => void;
+
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -45,6 +51,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onGenerateAI,
   aiResults,
   aiLoading,
+  colors,
+  selectedColor,
+  onColorSelect,
 }) => {
   const { t, lang, setLang } = useTranslation();
   const [aiTopic, setAiTopic] = useState("");
@@ -90,6 +99,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onChange={(value: string) => onProductSelect(value)}
             />
           ))}
+        </div>
+      )}
+
+      {/* --- Color Picker --- */}
+      {colors?.length > 0 && (
+        <div className="mb-6">
+          <ColorPicker
+            colors={colors}
+            selectedColor={selectedColor}
+            onSelect={onColorSelect}
+          />
         </div>
       )}
 
