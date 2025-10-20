@@ -9,6 +9,7 @@
   "enterText": "Enter text",
   "save": "Save",
   "aiIdeas": "💡 AI Ideas",
+  "aiSlogan": "Slogan",
   "enterTopic": "Enter topic (e.g. gym motivation)",
   "generating": "Generating...",
   "generate": "Generate slogans",
@@ -23,5 +24,7 @@
   "polo": "Polo shirt",
   "hoodie": "Hoodie",
   "undo": "Undo",
-  "redo": "Redo"
+  "redo": "Redo",
+  "missingApiKey": "Please set your OpenAI API key in the .env file to enable AI ideas.",
+  "productColor": "Product color"
 }

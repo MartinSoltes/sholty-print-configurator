@@ -65,7 +65,7 @@ const App: React.FC = () => {
   return (
     <main className="h-screen grid grid-cols-12 h-full">
       {/* --- Sidebar --- */}
-      <div className="col-span-3">
+      <div className="col-span-3 h-full overflow-y-scroll">
         <Sidebar
           products={products}
           selectedProduct={selectedProduct}
@@ -89,7 +89,7 @@ const App: React.FC = () => {
       </div>
 
       {/* --- Main Preview Area --- */}
-      <div className="col-span-9">
+      <div className="col-span-9 h-full overflow-scroll">
         <TopPanel
           selectedView={selectedView}
           views={views}

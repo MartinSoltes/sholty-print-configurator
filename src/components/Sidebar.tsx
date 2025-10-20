@@ -32,7 +32,6 @@ interface SidebarProps {
   colors: ColorVariant[];
   selectedColor: ColorVariant | null;
   onColorSelect: (color: ColorVariant) => void;
-
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -74,7 +73,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   };
 
   return (
-    <div className="bg-slate-950 h-full text-white p-4">
+    <div className="bg-slate-950 text-white p-4 h-full overflow-x-scroll">
       {products && (
         <div className="flex flex-col gap-2 mb-6">
           <h2 className="text-2xl font-semibold mb-2 flex justify-between items-center">
@@ -193,33 +192,51 @@ export const Sidebar: React.FC<SidebarProps> = ({
         )}
 
         <hr className="my-4 border-neutral-700" />
-
+        
+        {/* --- AI Section --- */}
         <h3 className="text-lg font-semibold mb-2">{t("aiIdeas")}</h3>
-        <input
-          type="text"
-          value={aiTopic}
-          onChange={(e) => setAiTopic(e.target.value)}
-          placeholder={t("enterTopic")}
-          className="w-full p-2 mb-2 rounded border border-neutral-600 bg-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
-        />
 
-        <Button onClick={() => onGenerateAI(aiTopic)}>
-          {aiLoading ? t("generating") : t("generate")}
-        </Button>
+        <h4 className="text-lg font-semibold mb-2">{t("aiSlogan")}</h4>
 
-        {aiResults.length > 0 && (
-          <div className="mt-3 flex flex-col gap-2">
-            {aiResults.map((slogan, i) => (
-              <button
-                key={i}
-                onClick={() => onAddText(selectedView, slogan)}
-                className="text-left p-2 rounded bg-slate-800 hover:bg-indigo-600 transition"
-              >
-                {slogan}
-              </button>
-            ))}
+        {import.meta.env.VITE_OPENAI_API_KEY?.trim() ? (
+          <>
+            <input
+              type="text"
+              value={aiTopic}
+              onChange={(e) => setAiTopic(e.target.value)}
+              placeholder={t("enterTopic")}
+              className="w-full p-2 mb-2 rounded border border-neutral-600 bg-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            />
+
+            <Button onClick={() => onGenerateAI(aiTopic)}>
+              {aiLoading ? t("generating") : t("generate")}
+            </Button>
+
+            {aiResults.length > 0 && (
+              <div className="mt-3 flex flex-col gap-2">
+                {aiResults.map((slogan, i) => (
+                  <button
+                    key={i}
+                    onClick={() => onAddText(selectedView, slogan)}
+                    className="text-left p-2 rounded bg-slate-800 hover:bg-indigo-600 transition"
+                  >
+                    {slogan}
+                  </button>
+                ))}
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="bg-yellow-700 text-yellow-100 text-sm p-3 rounded-md mb-3 border border-yellow-500 flex items-start gap-2">
+            <span className="text-lg">⚠️</span>
+            <span>
+              {t("missingApiKey") ||
+                "Please set your OpenAI API key in the .env file to enable AI ideas."}
+            </span>
           </div>
         )}
+
+
       </div>
     </div>
   );

@@ -26,7 +26,7 @@ export const TopPanel: React.FC<TopPanelProps> = ({
   const { t } = useTranslation();
 
   return (
-    <div className="w-full bg-slate-900 text-white p-4 flex items-center justify-center 2xl:justify-between gap-4 flex-wrap">
+    <div className="w-full bg-slate-900 text-white p-4 flex items-center justify-center 2xl:justify-between gap-4 flex-wrap sticky top-0 z-20">
       {/* Action Buttons */}
       <div className="flex flex-col md:flex-row items-center justify-between w-full max-w-xl">
         <h2 className="text-2xl font-bold mb-2 md:mb-0">{t("productPreview")}</h2>

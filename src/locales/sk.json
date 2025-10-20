@@ -9,6 +9,7 @@
   "enterText": "Zadajte text",
   "save": "Uložiť",
   "aiIdeas": "💡 AI nápady",
+  "aiSlogan": "Slogan",
   "enterTopic": "Zadajte tému (napr. motivácia do posilňovne)",
   "generating": "Generujem...",
   "generate": "Generovať slogany",
@@ -23,5 +24,7 @@
   "polo": "Polo tričko",
   "hoodie": "Mikina",
   "undo": "Späť",
-  "redo": "Dopredu"
+  "redo": "Dopredu",
+  "missingApiKey": "Prosím, nastav svoj OpenAI API kľúč v súbore .env, aby bolo možné používať AI nápady.",
+  "productColor": "Farba produktu"
 }

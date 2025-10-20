@@ -4,14 +4,14 @@ import dotenv from "dotenv";
 import OpenAI from "openai";
 
 dotenv.config();
-console.log("Loaded API key prefix:", process.env.OPENAI_API_KEY?.slice(0, 8));
+console.log("Loaded API key prefix:", process.env.VITE_OPENAI_API_KEY?.slice(0, 8));
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.VITE_OPENAI_API_KEY,
 });
 
 // --- AI slogan route ---
