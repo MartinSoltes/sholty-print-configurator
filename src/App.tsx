@@ -85,6 +85,7 @@ const App: React.FC = () => {
           colors={colors}
           selectedColor={selectedColor}
           onColorSelect={setSelectedColor}
+          onUpdateText={updateText}
         />
       </div>
 
@@ -182,11 +183,22 @@ const App: React.FC = () => {
                     fontSize: text.fontSize,
                     fontFamily: text.fontFamily,
                     color: text.color,
+                    fontWeight: text.bold ? "bold" : "normal",
+                    fontStyle: text.italic ? "italic" : "normal",
+                    textAlign: text.align || "left",
                     width: "100%",
                     height: "100%",
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "center",
+                    justifyContent:
+                      text.align === "center"
+                        ? "center"
+                        : text.align === "right"
+                        ? "flex-end"
+                        : "flex-start",
+                    padding: "0 4px",
+                    whiteSpace: "pre-wrap",
+                    wordBreak: "break-word",
                   }}
                 >
                   {text.content}

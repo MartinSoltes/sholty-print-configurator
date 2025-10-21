@@ -16,6 +16,9 @@ export interface DesignText {
   fontSize: number;
   fontFamily: string;
   color: string;
+  bold?: boolean;
+  italic?: boolean;
+  align?: "left" | "center" | "right";
 }
 
 export interface DesignViews<T> {
@@ -34,12 +37,4 @@ export interface ImageItem {
   file?: File;
 }
 
-export interface TextItem {
-  id: string;
-  content: string;
-  x?: number;
-  y?: number;
-  fontSize?: number;
-  fontFamily?: string;
-  color?: string;
-}
+export interface TextItem extends DesignText {}

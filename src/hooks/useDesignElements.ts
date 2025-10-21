@@ -37,7 +37,11 @@ export function useDesignElements() {
       fontSize: 20,
       fontFamily: "Arial",
       color: "#000000",
+      bold: false,
+      italic: false,
+      align: "left",
     };
+    
     set({
       ...present,
       texts: {
@@ -64,19 +68,21 @@ export function useDesignElements() {
     });
   };
 
-  // --- ✏️ Update text properties (position, style, etc.) ---
+  // --- ✏️ Update or remove text properties ---
   const updateText = (
     view: "front" | "back",
     id: string,
-    updates: Partial<DesignText>
+    updates: Partial<DesignText> & { remove?: boolean }
   ) => {
     set({
       ...present,
       texts: {
         ...texts,
-        [view]: texts[view].map((txt) =>
-          txt.id === id ? { ...txt, ...updates } : txt
-        ),
+        [view]: updates.remove
+          ? texts[view].filter((txt) => txt.id !== id)
+          : texts[view].map((txt) =>
+              txt.id === id ? { ...txt, ...updates } : txt
+            ),
       },
     });
   };

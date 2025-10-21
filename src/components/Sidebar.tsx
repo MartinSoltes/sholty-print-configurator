@@ -32,6 +32,7 @@ interface SidebarProps {
   colors: ColorVariant[];
   selectedColor: ColorVariant | null;
   onColorSelect: (color: ColorVariant) => void;
+  onUpdateText: (view: "front" | "back", id: string, updates: any) => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -53,9 +54,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
   colors,
   selectedColor,
   onColorSelect,
+  onUpdateText,
 }) => {
   const { t, lang, setLang } = useTranslation();
   const [aiTopic, setAiTopic] = useState("");
+  const [expandedTextId, setExpandedTextId] = useState<string | null>(null);
 
   const handleFileChange = (files: { name: string; src: string; file: File }[]) => {
     const preparedImages = files.map((file) => ({
@@ -153,14 +156,177 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {texts[selectedView].length > 0 && (
           <div className="flex flex-col gap-2 mt-2 overflow-y-auto">
-            {texts[selectedView].map((text) => (
-              <div
-                key={text.id}
-                className="bg-slate-800 p-2 rounded flex items-center gap-2"
-              >
-                <span className="text-sm">{text.content}</span>
-              </div>
-            ))}
+            {texts[selectedView].map((text) => {
+              const isExpanded = expandedTextId === text.id;
+              return (
+                <div key={text.id} className="bg-slate-800 p-3 rounded-md">
+                  <div className="flex justify-between items-center">
+                    {/* Editable text label */}
+                    {isExpanded ? (
+                      <input
+                        type="text"
+                        value={text.content}
+                        onChange={(e) =>
+                          onUpdateText(selectedView, text.id, {
+                            content: e.target.value,
+                          })
+                        }
+                        className="flex-1 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm text-white focus:ring-2 focus:ring-indigo-500"
+                      />
+                    ) : (
+                      <span
+                        className="text-sm flex-1"
+                        style={{
+                          fontFamily: text.fontFamily,
+                          color: text.color,
+                          fontSize: text.fontSize,
+                          fontWeight: text.bold ? "bold" : "normal",
+                          fontStyle: text.italic ? "italic" : "normal",
+                          textAlign: text.align || "left",
+                        }}
+                      >
+                        {text.content}
+                      </span>
+                    )}
+
+                    <div className="flex gap-2 ml-2">
+                      {/* ⚙️ Settings toggle */}
+                      <button
+                        onClick={() =>
+                          setExpandedTextId(isExpanded ? null : text.id)
+                        }
+                        className="text-gray-300 hover:text-indigo-400 cursor-pointer"
+                        title="Edit text"
+                      >
+                        •••
+                      </button>
+
+                      {/* 🗑️ Delete text */}
+                      <button
+                        onClick={() => onUpdateText(selectedView, text.id, { remove: true })}
+                        className="text-red-500 hover:text-red-400 cursor-pointer"
+                        title="Delete text"
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* --- Settings panel --- */}
+                  {isExpanded && (
+                    <div className="mt-3 border-t border-slate-700 pt-3 space-y-2">
+                      {/* Font Family */}
+                      <div>
+                        <label className="block text-xs mb-1">Font Family</label>
+                        <select
+                          value={text.fontFamily || "Roboto"}
+                          onChange={(e) =>
+                            onUpdateText(selectedView, text.id, {
+                              fontFamily: e.target.value,
+                            })
+                          }
+                          className="w-full p-1 bg-slate-900 border border-slate-600 rounded text-sm"
+                        >
+                          <option value="Roboto">Roboto</option>
+                          <option value="Oswald">Oswald</option>
+                          <option value="Montserrat">Montserrat</option>
+                          <option value="Lobster">Lobster</option>
+                          <option value="Playfair Display">Playfair Display</option>
+                          <option value="Poppins">Poppins</option>
+                          <option value="Raleway">Raleway</option>
+                          <option value="Source Sans Pro">Source Sans Pro</option>
+                          <option value="Open Sans">Open Sans</option>
+                        </select>
+                      </div>
+
+                      {/* Font Size */}
+                      <div>
+                        <label className="block text-xs mb-1">Font Size</label>
+                        <input
+                          type="number"
+                          min={8}
+                          max={100}
+                          value={text.fontSize || 20}
+                          onChange={(e) =>
+                            onUpdateText(selectedView, text.id, {
+                              fontSize: parseInt(e.target.value),
+                            })
+                          }
+                          className="w-full p-1 bg-slate-900 border border-slate-600 rounded text-sm"
+                        />
+                      </div>
+
+                      {/* Font Color */}
+                      <div>
+                        <label className="block text-xs mb-1">Color</label>
+                        <input
+                          type="color"
+                          value={text.color || "#ffffff"}
+                          onChange={(e) =>
+                            onUpdateText(selectedView, text.id, {
+                              color: e.target.value,
+                            })
+                          }
+                          className="w-full h-8 rounded"
+                        />
+                      </div>
+
+                      {/* Bold / Italic / Align */}
+                      <div className="flex justify-between items-center">
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() =>
+                              onUpdateText(selectedView, text.id, {
+                                bold: !text.bold,
+                              })
+                            }
+                            className={`px-2 py-1 rounded ${
+                              text.bold ? "bg-indigo-600" : "bg-slate-700"
+                            }`}
+                          >
+                            <b>B</b>
+                          </button>
+                          <button
+                            onClick={() =>
+                              onUpdateText(selectedView, text.id, {
+                                italic: !text.italic,
+                              })
+                            }
+                            className={`px-2 py-1 rounded ${
+                              text.italic ? "bg-indigo-600" : "bg-slate-700"
+                            }`}
+                          >
+                            <i>I</i>
+                          </button>
+                        </div>
+
+                        <div className="flex gap-2">
+                          {["left", "center", "right"].map((align) => (
+                            <button
+                              key={align}
+                              onClick={() =>
+                                onUpdateText(selectedView, text.id, { align })
+                              }
+                              className={`px-2 py-1 rounded ${
+                                text.align === align
+                                  ? "bg-indigo-600"
+                                  : "bg-slate-700"
+                              }`}
+                            >
+                              {align === "left"
+                                ? "⬅"
+                                : align === "center"
+                                ? "↔"
+                                : "➡"}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
 
@@ -183,50 +349,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={() => {
                 if (newText && newText.trim()) {
                   onAddText(selectedView, newText.trim());
+                  setNewText(""); // 🧹 clear the input
+                  setShowTextInput(false); // optional: auto-hide input after adding
                 }
               }}
             >
               {t("save")}
             </Button>
+
           </div>
         )}
 
-        <hr className="my-4 border-neutral-700" />
-        
         {/* --- AI Section --- */}
+        <hr className="my-4 border-neutral-700" />
+
         <h3 className="text-lg font-semibold mb-2">{t("aiIdeas")}</h3>
 
-        <h4 className="text-lg font-semibold mb-2">{t("aiSlogan")}</h4>
-
-        {import.meta.env.VITE_OPENAI_API_KEY?.trim() ? (
-          <>
-            <input
-              type="text"
-              value={aiTopic}
-              onChange={(e) => setAiTopic(e.target.value)}
-              placeholder={t("enterTopic")}
-              className="w-full p-2 mb-2 rounded border border-neutral-600 bg-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            />
-
-            <Button onClick={() => onGenerateAI(aiTopic)}>
-              {aiLoading ? t("generating") : t("generate")}
-            </Button>
-
-            {aiResults.length > 0 && (
-              <div className="mt-3 flex flex-col gap-2">
-                {aiResults.map((slogan, i) => (
-                  <button
-                    key={i}
-                    onClick={() => onAddText(selectedView, slogan)}
-                    className="text-left p-2 rounded bg-slate-800 hover:bg-indigo-600 transition"
-                  >
-                    {slogan}
-                  </button>
-                ))}
-              </div>
-            )}
-          </>
-        ) : (
+        {!import.meta.env.VITE_OPENAI_API_KEY ? (
           <div className="bg-yellow-700 text-yellow-100 text-sm p-3 rounded-md mb-3 border border-yellow-500 flex items-start gap-2">
             <span className="text-lg">⚠️</span>
             <span>
@@ -234,8 +373,37 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 "Please set your OpenAI API key in the .env file to enable AI ideas."}
             </span>
           </div>
-        )}
+        ) : (
+          <>
+            <h4 className="text-lg font-semibold mb-2">{t("aiSlogan")}</h4>
 
+          <input
+            type="text"
+            value={aiTopic}
+            onChange={(e) => setAiTopic(e.target.value)}
+            placeholder={t("enterTopic")}
+            className="w-full p-2 mb-2 rounded border border-neutral-600 bg-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          />
+
+          <Button onClick={() => onGenerateAI(aiTopic)}>
+            {aiLoading ? t("generating") : t("generate")}
+          </Button>
+
+          {aiResults.length > 0 && (
+            <div className="mt-3 flex flex-col gap-2">
+              {aiResults.map((slogan, i) => (
+                <button
+                  key={i}
+                  onClick={() => onAddText(selectedView, slogan)}
+                  className="text-left p-2 rounded bg-slate-800 hover:bg-indigo-600 transition"
+                >
+                  {slogan}
+                </button>
+              ))}
+            </div>
+          )}
+        </>
+      )}
 
       </div>
     </div>

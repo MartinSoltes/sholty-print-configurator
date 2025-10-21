@@ -9,7 +9,6 @@
   "enterText": "Zadajte text",
   "save": "Uložiť",
   "aiIdeas": "💡 AI nápady",
-  "aiSlogan": "Slogan",
   "enterTopic": "Zadajte tému (napr. motivácia do posilňovne)",
   "generating": "Generujem...",
   "generate": "Generovať slogany",
@@ -25,6 +24,6 @@
   "hoodie": "Mikina",
   "undo": "Späť",
   "redo": "Dopredu",
-  "missingApiKey": "Prosím, nastav svoj OpenAI API kľúč v súbore .env, aby bolo možné používať AI nápady.",
-  "productColor": "Farba produktu"
+  "missingApiKey": "Prosím nastavte svoj OpenAI API kľúč v súbore .env, aby ste mohli používať AI nápady.",
+  "aiSlogan": "AI generované slogany"
 }
