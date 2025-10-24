@@ -11,7 +11,7 @@
   "aiIdeas": "💡 AI nápady",
   "enterTopic": "Zadajte tému (napr. motivácia do posilňovne)",
   "generating": "Generujem...",
-  "generate": "Generovať slogany",
+  "generate": "Generovať",
   "selectFile": "Vyberte súbor",
   "filesSelected": "súborov vybraných",
   "productSide": "Strana produktu",
@@ -26,6 +26,7 @@
   "redo": "Dopredu",
   "missingApiKey": "Prosím nastavte svoj OpenAI API kľúč v súbore .env, aby ste mohli používať AI nápady.",
   "aiSlogan": "AI generované slogany",
+  "productColor": "Farba produktu",
   "aiGraphics": "AI Grafika",
   "enterGraphicsIdea": "Zadajte nápad na grafiku",
   "generateGraphics": "Vygenerovať grafiku"

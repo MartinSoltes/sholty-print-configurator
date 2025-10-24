@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import OpenAI from "openai";
 import multer from "multer";
+import fetch from "node-fetch";
 
 dotenv.config();
 
@@ -14,6 +15,9 @@ const upload = multer({ storage: multer.memoryStorage() });
 const openai = new OpenAI({
   apiKey: process.env.VITE_OPENAI_API_KEY,
 });
+
+const graphicsCache = new Map(); // key: prompt+refs, value: { images, timestamp }
+const CACHE_TTL = 1000 * 60 * 60 * 6;
 
 console.log("✅ AI server initialized. API key:", process.env.VITE_OPENAI_API_KEY ? "✔️ OK" : "❌ Missing");
 
@@ -72,28 +76,49 @@ app.post("/api/generate-graphics", async (req, res) => {
       return res.status(400).json({ error: "Missing prompt." });
     }
 
+    const key = `${prompt}_${refs?.join("_") || ""}`;
+    const cached = graphicsCache.get(key);
+
+    // ✅ If cache is valid, return it instantly
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+      console.log("⚡ Serving cached graphics for:", prompt);
+      return res.json({ images: cached.images });
+    }
+
     console.log("🎨 Generating graphics (DALL·E 3) for:", prompt);
+
     const referenceText = refs?.length
       ? `Use these images as inspiration: ${refs.map((_, i) => `[ref${i + 1}]`).join(", ")}.`
       : "";
 
     const images = [];
 
-    // DALL·E 3 only allows n=1, so we loop manually
+    // 🧩 Generate 3 images sequentially (DALL·E 3 only allows n = 1)
     for (let i = 0; i < 3; i++) {
       const result = await openai.images.generate({
         model: "dall-e-3",
         prompt: `Create a simple, one-color, vector-style graphic suitable for vinyl cutting based on this idea: "${prompt}". Avoid gradients, text, and complex shading. Use solid shapes only. ${referenceText}`,
         size: "1024x1024",
         quality: "standard",
-        style: "vivid"
+        style: "vivid",
       });
 
       const url = result.data?.[0]?.url;
-      if (url) images.push(url);
+      if (!url) continue;
+
+      // Download image and convert to base64
+      const response = await fetch(url);
+      const buffer = await response.arrayBuffer();
+      const base64 = `data:image/png;base64,${Buffer.from(buffer).toString("base64")}`;
+
+      images.push({ url, base64 });
     }
 
     console.log(`✅ Generated ${images.length} images`);
+
+    // 🧠 Store in cache
+    graphicsCache.set(key, { images, timestamp: Date.now() });
+
     res.json({ images });
   } catch (error) {
     console.error("❌ Graphic generation failed:", error.response?.data || error.message || error);

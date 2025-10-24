@@ -36,14 +36,35 @@ export async function uploadRefs(files: File[]): Promise<string[]> {
 /** 🎨 Generate 2–3 simple, one-color graphics (as data URLs) */
 export async function generateAIGraphics(prompt: string, refs?: string[]): Promise<string[]> {
   try {
+    // 🧠 Local cache key
+    const cacheKey = `ai_graphics_${prompt}_${refs?.join("_") || ""}`;
+    const cached = sessionStorage.getItem(cacheKey);
+    if (cached) {
+      console.log("⚡ Using cached AI graphics for:", prompt);
+      return JSON.parse(cached);
+    }
+
+    // 🌐 Call backend
     const res = await fetch(`${API_URL}/generate-graphics`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt, refs }),
     });
+
     if (!res.ok) throw new Error(`Server returned ${res.status}`);
-    const data: { images?: string[] } = await res.json();
-    return data.images ?? [];
+
+    const data: {
+      images?: { url: string; base64: string }[];
+    } = await res.json();
+
+    const result = data.images?.map((img) => img.base64) ?? [];
+
+    // 💾 Cache results for later (browser session)
+    if (result.length > 0) {
+      sessionStorage.setItem(cacheKey, JSON.stringify(result));
+    }
+
+    return result;
   } catch (err) {
     console.error("❌ generateAIGraphics failed:", err);
     return [];
