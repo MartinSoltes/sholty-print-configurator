@@ -91,9 +91,8 @@ app.post("/api/generate-graphics", async (req, res) => {
       ? `Use these images as inspiration: ${refs.map((_, i) => `[ref${i + 1}]`).join(", ")}.`
       : "";
 
-    const images = [];
-
     // 🧩 Generate 3 images sequentially (DALL·E 3 only allows n = 1)
+    /* const images = [];
     for (let i = 0; i < 3; i++) {
       const result = await openai.images.generate({
         model: "dall-e-3",
@@ -106,7 +105,6 @@ app.post("/api/generate-graphics", async (req, res) => {
       const url = result.data?.[0]?.url;
       if (!url) continue;
 
-      // Download image and convert to base64
       const response = await fetch(url);
       const buffer = await response.arrayBuffer();
       const base64 = `data:image/png;base64,${Buffer.from(buffer).toString("base64")}`;
@@ -114,7 +112,31 @@ app.post("/api/generate-graphics", async (req, res) => {
       images.push({ url, base64 });
     }
 
-    console.log(`✅ Generated ${images.length} images`);
+    console.log(`✅ Generated ${images.length} images`); */
+
+    // 🔹 Generate only 1 image now
+    const result = await openai.images.generate({
+      model: "dall-e-3",
+      prompt: `Create a simple, one-color, vector-style graphic suitable for vinyl cutting based on this idea: "${prompt}". Avoid gradients, text, and complex shading. Use solid shapes only. ${referenceText}`,
+      size: "1024x1024",
+      quality: "standard",
+      style: "vivid",
+    });
+
+    const url = result.data?.[0]?.url;
+    if (!url) throw new Error("No image URL returned from OpenAI.");
+
+    // 🧩 Fetch image and encode to base64
+    const response = await fetch(url);
+    const buffer = await response.arrayBuffer();
+    const base64 = `data:image/png;base64,${Buffer.from(buffer).toString("base64")}`;
+
+    const images = [{ url, base64 }];
+
+    // 🧠 Cache it for next time
+    graphicsCache.set(key, { images, timestamp: Date.now() });
+
+    console.log(`✅ Generated and cached 1 image for prompt: "${prompt}"`);
 
     // 🧠 Store in cache
     graphicsCache.set(key, { images, timestamp: Date.now() });

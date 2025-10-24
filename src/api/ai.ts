@@ -1,5 +1,6 @@
-// src/api/ai.ts
 const API_URL = import.meta.env.VITE_API_BASE || "http://localhost:5050/api";
+
+const memoryCache = new Map<string, string[]>();
 
 /** ✍️ Generate 5 slogans via backend */
 export async function fetchSlogans(topic: string): Promise<string[]> {
@@ -36,15 +37,15 @@ export async function uploadRefs(files: File[]): Promise<string[]> {
 /** 🎨 Generate 2–3 simple, one-color graphics (as data URLs) */
 export async function generateAIGraphics(prompt: string, refs?: string[]): Promise<string[]> {
   try {
-    // 🧠 Local cache key
-    const cacheKey = `ai_graphics_${prompt}_${refs?.join("_") || ""}`;
-    const cached = sessionStorage.getItem(cacheKey);
-    if (cached) {
-      console.log("⚡ Using cached AI graphics for:", prompt);
-      return JSON.parse(cached);
+    const key = `ai_graphics_${prompt}_${refs?.join("_") || ""}`;
+
+    // ⚡ Check memory cache first
+    if (memoryCache.has(key)) {
+      console.log("⚡ Using in-memory AI graphics cache:", prompt);
+      return memoryCache.get(key)!;
     }
 
-    // 🌐 Call backend
+    // 🌐 Request from backend
     const res = await fetch(`${API_URL}/generate-graphics`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -59,9 +60,15 @@ export async function generateAIGraphics(prompt: string, refs?: string[]): Promi
 
     const result = data.images?.map((img) => img.base64) ?? [];
 
-    // 💾 Cache results for later (browser session)
-    if (result.length > 0) {
-      sessionStorage.setItem(cacheKey, JSON.stringify(result));
+    // ✅ Store in memory cache
+    memoryCache.set(key, result);
+
+    // 💾 Attempt to store lightweight cache in sessionStorage
+    try {
+      const urls = data.images?.map((img) => img.url) ?? [];
+      sessionStorage.setItem(key, JSON.stringify(urls));
+    } catch (storageErr) {
+      console.warn("⚠️ Could not cache to sessionStorage (too large):", storageErr);
     }
 
     return result;
