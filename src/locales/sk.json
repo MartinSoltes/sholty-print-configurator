@@ -25,5 +25,8 @@
   "undo": "Späť",
   "redo": "Dopredu",
   "missingApiKey": "Prosím nastavte svoj OpenAI API kľúč v súbore .env, aby ste mohli používať AI nápady.",
-  "aiSlogan": "AI generované slogany"
+  "aiSlogan": "AI generované slogany",
+  "aiGraphics": "AI Grafika",
+  "enterGraphicsIdea": "Zadajte nápad na grafiku",
+  "generateGraphics": "Vygenerovať grafiku"
 }

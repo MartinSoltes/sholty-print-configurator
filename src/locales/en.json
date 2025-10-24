@@ -26,5 +26,8 @@
   "redo": "Redo",
   "missingApiKey": "Please set your OpenAI API key in the .env file to enable AI ideas.",
   "aiSlogan": "AI-generated slogans",
-  "productColor": "Product color"
+  "productColor": "Product color",
+  "aiGraphics": "AI Graphics",
+  "enterGraphicsIdea": "Describe your graphic idea",
+  "generateGraphics": "Generate Graphics"
 }

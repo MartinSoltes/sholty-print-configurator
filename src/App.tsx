@@ -5,7 +5,7 @@ import { getProducts, backgrounds, getViews } from "./config";
 import { Sidebar } from "./components/Sidebar";
 import { TopPanel } from "./components/TopPanel";
 import { useDesignElements } from "@/hooks/useDesignElements";
-import { fetchSlogans } from "@/api/ai";
+import { fetchSlogans, generateAIGraphics } from "@/api/ai";
 import { useTranslation } from "@/context/TranslationContext";
 import { useColors } from "@/hooks/useColors";
 import type { ColorVariant } from "@/hooks/useColors";
@@ -25,6 +25,18 @@ const App: React.FC = () => {
   const { images, texts, handleAddImage, handleAddText, updateImage, updateText, undo, redo, canUndo, canRedo } = useDesignElements();
   const [aiResults, setAiResults] = useState<string[]>([]);
   const [aiLoading, setAiLoading] = useState(false);
+  const [aiGraphicsPrompt, setAiGraphicsPrompt] = useState("");
+  const [aiGraphicsResults, setAiGraphicsResults] = useState<string[]>([]);
+  const [aiGraphicsLoading, setAiGraphicsLoading] = useState(false);
+  const [referenceImages, setReferenceImages] = useState<{ name: string; src: string; file: File }[]>([]);
+
+const handleGenerateAIGraphics = async (prompt: string, refs: string[]) => {
+  if (!prompt.trim()) return;
+  setAiGraphicsLoading(true);
+  const results = await generateAIGraphics(prompt, refs);
+  setAiGraphicsResults(results);
+  setAiGraphicsLoading(false);
+};
 
   // --- 🤖 AI slogan generation ---
   const handleGenerateAI = async (topic: string) => {
@@ -86,6 +98,13 @@ const App: React.FC = () => {
           selectedColor={selectedColor}
           onColorSelect={setSelectedColor}
           onUpdateText={updateText}
+          aiGraphicsPrompt={aiGraphicsPrompt}
+          setAiGraphicsPrompt={setAiGraphicsPrompt}
+          aiGraphicsResults={aiGraphicsResults}
+          aiGraphicsLoading={aiGraphicsLoading}
+          onGenerateAIGraphics={handleGenerateAIGraphics}
+          referenceImages={referenceImages}
+          setReferenceImages={setReferenceImages}
         />
       </div>
 
