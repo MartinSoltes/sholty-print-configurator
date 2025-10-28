@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Rnd } from "react-rnd";
 import html2canvas from "html2canvas";
 import { getProducts, backgrounds, getViews } from "./config";
@@ -15,6 +15,7 @@ const App: React.FC = () => {
   const { t } = useTranslation();
   const views = getViews(t);
   const products = getProducts(t);
+  const [enableProductSelection, setEnableProductSelection] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState<string>("tshirt");
   const [selectedView, setSelectedView] = useState<"front" | "back">("front");
   const [selectedColor, setSelectedColor] = useState<ColorVariant | null>(null);
@@ -23,6 +24,7 @@ const App: React.FC = () => {
   const [showTextInput, setShowTextInput] = useState<boolean>(false);
   const previewRef = useRef<HTMLDivElement>(null);
   const { images, texts, handleAddImage, handleAddText, updateImage, updateText, undo, redo, canUndo, canRedo } = useDesignElements();
+  const [aiEnabled, setAiEnabled] = useState(true);
   const [aiResults, setAiResults] = useState<string[]>([]);
   const [aiLoading, setAiLoading] = useState(false);
   const [aiGraphicsPrompt, setAiGraphicsPrompt] = useState("");
@@ -30,15 +32,16 @@ const App: React.FC = () => {
   const [aiGraphicsLoading, setAiGraphicsLoading] = useState(false);
   const [referenceImages, setReferenceImages] = useState<{ name: string; src: string; file: File }[]>([]);
 
-const handleGenerateAIGraphics = async (prompt: string, refs: string[]) => {
-  if (!prompt.trim()) return;
-  setAiGraphicsLoading(true);
-  const results = await generateAIGraphics(prompt, refs);
-  setAiGraphicsResults(results);
-  setAiGraphicsLoading(false);
-};
+  // --- AI graphics generation ---
+  const handleGenerateAIGraphics = async (prompt: string, refs: string[]) => {
+    if (!prompt.trim()) return;
+    setAiGraphicsLoading(true);
+    const results = await generateAIGraphics(prompt, refs);
+    setAiGraphicsResults(results);
+    setAiGraphicsLoading(false);
+  };
 
-  // --- 🤖 AI slogan generation ---
+  // --- AI slogan generation ---
   const handleGenerateAI = async (topic: string) => {
     if (!topic.trim()) return;
     setAiLoading(true);
@@ -47,7 +50,7 @@ const handleGenerateAIGraphics = async (prompt: string, refs: string[]) => {
     setAiLoading(false);
   };
 
-  // --- 💾 Export design as PNG ---
+  // --- Export design as PNG ---
   const handleExport = async (): Promise<void> => {
     if (!previewRef.current) return;
 
@@ -63,7 +66,34 @@ const handleGenerateAIGraphics = async (prompt: string, refs: string[]) => {
     link.click();
   };
 
-  // --- 🌆 Select background ---
+  // --- 🧠 Load query params from URL ---
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const productParam = params.get("product");
+    const colorParam = params.get("color");
+    const aiParam = params.get("ai");
+
+    if (productParam) {
+      setSelectedProduct(productParam);
+      setEnableProductSelection(false);
+    }
+
+    if (colorParam && colors.length > 0) {
+      setEnableProductSelection(false);
+      const foundColor = colors.find(
+        (c) => c.slug.toLowerCase() === colorParam.toLowerCase()
+      );
+      if (foundColor) {
+        setSelectedColor(foundColor);
+      }
+    }
+
+    if(aiEnabled && (aiParam == "0" || aiParam == "false")) {
+      setAiEnabled(false);
+    }
+  }, [colors]);
+
+  // --- Select background ---
   const selectedBg =
   selectedColor
     ? selectedView === "front"
@@ -73,7 +103,7 @@ const handleGenerateAIGraphics = async (prompt: string, refs: string[]) => {
         (bg) => bg.type === selectedProduct && bg.view === selectedView
       )?.image ?? "";
 
-  // --- 🧩 Render ---
+  // --- Render ---
   return (
     <main className="h-screen grid grid-cols-12 h-full">
       {/* --- Sidebar --- */}
@@ -105,6 +135,8 @@ const handleGenerateAIGraphics = async (prompt: string, refs: string[]) => {
           onGenerateAIGraphics={handleGenerateAIGraphics}
           referenceImages={referenceImages}
           setReferenceImages={setReferenceImages}
+          aiEnabled={aiEnabled}
+          enableProductSelection={enableProductSelection}
         />
       </div>
 

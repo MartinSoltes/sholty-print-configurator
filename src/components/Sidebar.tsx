@@ -8,6 +8,7 @@ import { ColorVariant } from "@/hooks/useColors";
 import { ColorPicker } from "./ColorPicker";
 
 interface SidebarProps {
+  enableProductSelection: boolean
   products: Product[];
   selectedProduct: string;
   onProductSelect: (value: string) => void;
@@ -34,6 +35,7 @@ interface SidebarProps {
   onColorSelect: (color: ColorVariant) => void;
   onUpdateText: (view: "front" | "back", id: string, updates: any) => void;
   aiGraphicsPrompt: string;
+  aiEnabled: boolean
   setAiGraphicsPrompt: (value: string) => void;
   aiGraphicsResults: string[];
   aiGraphicsLoading: boolean;
@@ -44,6 +46,7 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({
   products,
+  enableProductSelection,
   selectedProduct,
   onProductSelect,
   onAddImage,
@@ -62,6 +65,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   selectedColor,
   onColorSelect,
   onUpdateText,
+  aiEnabled,
   aiGraphicsPrompt,
   setAiGraphicsPrompt,
   aiGraphicsResults,
@@ -91,43 +95,49 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <div className="bg-slate-950 text-white p-4 h-full overflow-x-scroll">
-      {products && (
-        <div className="flex flex-col gap-2 mb-6">
-          <h2 className="text-2xl font-semibold mb-2 flex justify-between items-center">
-            {t("product")}
-            <select
-              value={lang}
-              onChange={(e) => setLang(e.target.value as "sk" | "en")}
-              className="text-sm bg-slate-800 text-white border border-neutral-600 rounded p-1"
-            >
-              <option value="sk">SK</option>
-              <option value="en">EN</option>
-            </select>
-          </h2>
+      {enableProductSelection && 
+        <>
+          {products && (
+            <div className="flex flex-col gap-2 mb-6">
+              <h2 className="text-2xl font-semibold mb-2 flex justify-between items-center">
+                {t("product")}
+                <select
+                  value={lang}
+                  onChange={(e) => setLang(e.target.value as "sk" | "en")}
+                  className="text-sm bg-slate-800 text-white border border-neutral-600 rounded p-1"
+                >
+                  <option value="sk">SK</option>
+                  <option value="en">EN</option>
+                </select>
+              </h2>
 
-          {products.map((product, index) => (
-            <OptionButton
-              key={index}
-              name="product"
-              option={product}
-              type="radio"
-              checked={selectedProduct === product.value}
-              onChange={(value: string) => onProductSelect(value)}
-            />
-          ))}
-        </div>
-      )}
+              {products.map((product, index) => (
+                <OptionButton
+                  key={index}
+                  name="product"
+                  option={product}
+                  type="radio"
+                  checked={selectedProduct === product.value}
+                  onChange={(value: string) => onProductSelect(value)}
+                />
+              ))}
+            </div>
+          )}
 
-      {/* --- Color Picker --- */}
-      {colors?.length > 0 && (
-        <div className="mb-6">
-          <ColorPicker
-            colors={colors}
-            selectedColor={selectedColor}
-            onSelect={onColorSelect}
-          />
-        </div>
-      )}
+          {/* --- Color Picker --- */}
+          {colors?.length > 0 && (
+            <div className="mb-6">
+              <ColorPicker
+                colors={colors}
+                selectedColor={selectedColor}
+                onSelect={onColorSelect}
+              />
+            </div>
+          )}
+
+          <hr className="my-4 border-neutral-700" />
+        </>
+      }
 
       <div className="flex flex-col gap-2 mb-4">
         <h2 className="text-2xl font-semibold mb-2">
@@ -375,117 +385,121 @@ export const Sidebar: React.FC<SidebarProps> = ({
         )}
 
         {/* --- AI Section --- */}
-        <hr className="my-4 border-neutral-700" />
+        {aiEnabled && 
+        <>
+          <hr className="my-4 border-neutral-700" />
 
-        <h3 className="text-lg font-semibold">{t("aiIdeas")}</h3>
+          <h3 className="text-lg font-semibold">{t("aiIdeas")}</h3>
 
-        {/* --- AI Graphics Section --- */}
-        <h4 className="text-lg font-semibold mb-2 mt-4">{t("aiGraphics")}</h4>
+          {/* --- AI Graphics Section --- */}
+          <h4 className="text-lg font-semibold mb-2 mt-4">{t("aiGraphics")}</h4>
 
-        {import.meta.env.VITE_OPENAI_API_KEY?.trim() ? (
-          <>
-            <input
-              type="text"
-              value={aiGraphicsPrompt}
-              onChange={(e) => setAiGraphicsPrompt(e.target.value)}
-              placeholder={t("enterGraphicsIdea")}
-              className="w-full p-2 mb-2 rounded border border-neutral-600 bg-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            />
+          {import.meta.env.VITE_OPENAI_API_KEY?.trim() ? (
+            <>
+              <input
+                type="text"
+                value={aiGraphicsPrompt}
+                onChange={(e) => setAiGraphicsPrompt(e.target.value)}
+                placeholder={t("enterGraphicsIdea")}
+                className="w-full p-2 mb-2 rounded border border-neutral-600 bg-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              />
 
-            <FileButton
-              multiple={true}
-              accept=".jpg, .jpeg, .png"
-              files={referenceImages}
-              callback={setReferenceImages}
-            />
+              <FileButton
+                multiple={true}
+                accept=".jpg, .jpeg, .png"
+                files={referenceImages}
+                callback={setReferenceImages}
+              />
 
-            <Button
-              onClick={() =>
-                onGenerateAIGraphics(
-                  aiGraphicsPrompt,
-                  referenceImages.map((img) => img.src)
-                )
-              }
-            >
-              {aiGraphicsLoading ? t("generating") : t("generate")}
-            </Button>
+              <Button
+                onClick={() =>
+                  onGenerateAIGraphics(
+                    aiGraphicsPrompt,
+                    referenceImages.map((img) => img.src)
+                  )
+                }
+              >
+                {aiGraphicsLoading ? t("generating") : t("generate")}
+              </Button>
 
-            {aiGraphicsResults.length > 0 && (
-              <div className="mt-3 grid grid-cols-3 gap-2">
-                {aiGraphicsResults.map((img, i) => (
-                  <img
-                    key={i}
-                    src={img}
-                    alt={`AI Graphic ${i}`}
-                    className="rounded shadow cursor-pointer hover:ring-2 hover:ring-indigo-500"
-                    onClick={() =>
-                      onAddImage(selectedView, [
-                        {
-                          id: crypto.randomUUID(),
-                          name: `ai-graphic-${i + 1}`,
-                          src: img,
-                          x: 0,
-                          y: 0,
-                          width: 200,
-                          height: 200,
-                        },
-                      ])
-                    }
-                  />
-                ))}
-              </div>
-            )}
-          </>
-        ) : (
-          <div className="bg-yellow-700 text-yellow-100 text-sm p-3 rounded-md mb-3 border border-yellow-500 flex items-start gap-2">
-            <span className="text-lg">⚠️</span>
-            <span>
-              {t("missingApiKey") ||
-                "Please set your OpenAI API key in the .env file to enable AI graphics."}
-            </span>
-          </div>
-        )}
-
-        {/* --- AI Slogan --- */}
-        {!import.meta.env.VITE_OPENAI_API_KEY ? (
-          <div className="bg-yellow-700 text-yellow-100 text-sm p-3 rounded-md mb-3 border border-yellow-500 flex items-start gap-2">
-            <span className="text-lg">⚠️</span>
-            <span>
-              {t("missingApiKey") ||
-                "Please set your OpenAI API key in the .env file to enable AI ideas."}
-            </span>
-          </div>
+              {aiGraphicsResults.length > 0 && (
+                <div className="mt-3 grid grid-cols-3 gap-2">
+                  {aiGraphicsResults.map((img, i) => (
+                    <img
+                      key={i}
+                      src={img}
+                      alt={`AI Graphic ${i}`}
+                      className="rounded shadow cursor-pointer hover:ring-2 hover:ring-indigo-500"
+                      onClick={() =>
+                        onAddImage(selectedView, [
+                          {
+                            id: crypto.randomUUID(),
+                            name: `ai-graphic-${i + 1}`,
+                            src: img,
+                            x: 0,
+                            y: 0,
+                            width: 200,
+                            height: 200,
+                          },
+                        ])
+                      }
+                    />
+                  ))}
+                </div>
+              )}
+            </>
           ) : (
-          <>
-            <h4 className="text-lg font-semibold mb-2 mt-4">{t("aiSlogan")}</h4>
+            <div className="bg-yellow-700 text-yellow-100 text-sm p-3 rounded-md mb-3 border border-yellow-500 flex items-start gap-2">
+              <span className="text-lg">⚠️</span>
+              <span>
+                {t("missingApiKey") ||
+                  "Please set your OpenAI API key in the .env file to enable AI graphics."}
+              </span>
+            </div>
+          )}
 
-            <input
-              type="text"
-              value={aiTopic}
-              onChange={(e) => setAiTopic(e.target.value)}
-              placeholder={t("enterTopic")}
-              className="w-full p-2 mb-2 rounded border border-neutral-600 bg-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            />
+          {/* --- AI Slogan --- */}
+          {!import.meta.env.VITE_OPENAI_API_KEY ? (
+            <div className="bg-yellow-700 text-yellow-100 text-sm p-3 rounded-md mb-3 border border-yellow-500 flex items-start gap-2">
+              <span className="text-lg">⚠️</span>
+              <span>
+                {t("missingApiKey") ||
+                  "Please set your OpenAI API key in the .env file to enable AI ideas."}
+              </span>
+            </div>
+            ) : (
+            <>
+              <h4 className="text-lg font-semibold mb-2 mt-4">{t("aiSlogan")}</h4>
 
-            <Button onClick={() => onGenerateAI(aiTopic)}>
-              {aiLoading ? t("generating") : t("generate")}
-            </Button>
+              <input
+                type="text"
+                value={aiTopic}
+                onChange={(e) => setAiTopic(e.target.value)}
+                placeholder={t("enterTopic")}
+                className="w-full p-2 mb-2 rounded border border-neutral-600 bg-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              />
 
-            {aiResults.length > 0 && (
-              <div className="mt-3 flex flex-col gap-2">
-                {aiResults.map((slogan, i) => (
-                  <button
-                    key={i}
-                    onClick={() => onAddText(selectedView, slogan)}
-                    className="text-left p-2 rounded bg-slate-800 hover:bg-indigo-600 transition"
-                  >
-                    {slogan}
-                  </button>
-                ))}
-              </div>
-            )}
-          </>
-        )}
+              <Button onClick={() => onGenerateAI(aiTopic)}>
+                {aiLoading ? t("generating") : t("generate")}
+              </Button>
+
+              {aiResults.length > 0 && (
+                <div className="mt-3 flex flex-col gap-2">
+                  {aiResults.map((slogan, i) => (
+                    <button
+                      key={i}
+                      onClick={() => onAddText(selectedView, slogan)}
+                      className="text-left p-2 rounded bg-slate-800 hover:bg-indigo-600 transition"
+                    >
+                      {slogan}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+        </>
+        }
 
       </div>
     </div>
