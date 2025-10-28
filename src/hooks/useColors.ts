@@ -1,7 +1,8 @@
 import { useMemo } from "react";
 import tshirtColors from "@/data/colors/tshirtColors.json";
+import hoodieColors from "@/data/colors/hoodieColors.json"
 // later add: import poloColors from "@/data/colors/poloColors.json"
-// import hoodieColors from "@/data/colors/hoodieColors.json"
+
 
 export interface ColorVariant {
   label: string;
@@ -19,7 +20,7 @@ export function useColors(product: string): ColorVariant[] {
       case "polo":
         return []; // placeholder
       case "hoodie":
-        return []; // placeholder
+        return hoodieColors as ColorVariant[];
       default:
         return [];
     }

@@ -36,11 +36,11 @@ export const backgrounds = [
     {
         type: 'hoodie',
         view: 'front',
-        image: './assets/bg-hoodie-front.jpg'
+        image: './assets/backgrounds/hoodie/white/front.jpg'
     },
     {
         type: 'hoodie',
         view: 'back',
-        image: './assets/bg-hoodie-back.jpg'
+        image: './assets/backgrounds/hoodie/white/back.jpg'
     }
 ]
