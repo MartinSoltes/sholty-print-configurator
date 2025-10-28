@@ -15,7 +15,7 @@ const App: React.FC = () => {
   const { t } = useTranslation();
   const views = getViews(t);
   const products = getProducts(t);
-  const [enableProductSelection, setEnableProductSelection] = useState(true);
+  const enableProductSelection = !new URLSearchParams(window.location.search).get("product");
   const [selectedProduct, setSelectedProduct] = useState<string>("tshirt");
   const [selectedView, setSelectedView] = useState<"front" | "back">("front");
   const [selectedColor, setSelectedColor] = useState<ColorVariant | null>(null);
@@ -75,11 +75,9 @@ const App: React.FC = () => {
 
     if (productParam) {
       setSelectedProduct(productParam);
-      setEnableProductSelection(false);
     }
 
     if (colorParam && colors.length > 0) {
-      setEnableProductSelection(false);
       const foundColor = colors.find(
         (c) => c.slug.toLowerCase() === colorParam.toLowerCase()
       );
