@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import OptionButton from "./OptionButton";
 import FileButton from "./FileButton";
 import { Button } from "./Button";
-import { Product, DesignImage, ImageItem, TextItem } from "@/types";
+import { Product, DesignImage, ImageItem, TextItem, PrintColor } from "@/types";
 import { useTranslation } from "@/context/TranslationContext";
 import { ColorVariant } from "@/hooks/useColors";
 import { ColorPicker } from "./ColorPicker";
+import easyWeedColors from "@/data/colors/print/easyWeed.json";
 
 interface SidebarProps {
   enableProductSelection: boolean
@@ -280,19 +281,34 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         />
                       </div>
 
-                      {/* Font Color */}
+                      {/* Font Color (EasyWeed Vinyls) */}
                       <div>
-                        <label className="block text-xs mb-1">Color</label>
-                        <input
-                          type="color"
-                          value={text.color || "#ffffff"}
-                          onChange={(e) =>
-                            onUpdateText(selectedView, text.id, {
-                              color: e.target.value,
-                            })
-                          }
-                          className="w-full h-8 rounded"
-                        />
+                        <label className="block text-xs mb-1">Print Color (EasyWeed)</label>
+                        <div className="flex flex-wrap gap-2">
+                          {easyWeedColors.map((color: PrintColor) => {
+                            const isSelected = text.print?.colorSlug === color.slug;
+                            return (
+                              <button
+                                key={color.slug}
+                                onClick={() =>
+                                  onUpdateText(selectedView, text.id, {
+                                    color: color.hex,
+                                    print: {
+                                      material: "easyWeed",
+                                      colorSlug: color.slug,
+                                      hex: color.hex,
+                                    },
+                                  })
+                                }
+                                title={color.label}
+                                className={`w-7 h-7 rounded-full border-2 ${
+                                  isSelected ? "border-indigo-400 scale-110" : "border-gray-400"
+                                } transition`}
+                                style={{ backgroundColor: color.hex }}
+                              />
+                            );
+                          })}
+                        </div>
                       </div>
 
                       {/* Bold / Italic / Align */}

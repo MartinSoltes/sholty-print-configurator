@@ -8,5 +8,12 @@ export interface ColorVariant {
   back: string;      // path to back image
 }
 
+export interface PrintColor {
+  slug: string;
+  label: string;
+  hex: string;
+  image?: string;
+}
+
 // Derived type for product identification
 export type ProductValue = Product["value"];
