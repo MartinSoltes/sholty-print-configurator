@@ -31,5 +31,7 @@
   "enterGraphicsIdea": "Zadajte nápad na grafiku",
   "generateGraphics": "Vygenerovať grafiku",
   "textColor": "Farba textu",
-  "overlayColor": "Farba prekrytia"
+  "overlayColor": "Farba prekrytia",
+  "delete": "Odstrániť",
+  "edit": "Upraviť"
 }

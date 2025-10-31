@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Rnd } from "react-rnd";
 import html2canvas from "html2canvas";
 import { getProducts, backgrounds, getViews } from "./config";
-import { Sidebar } from "@/components/Sidebar";
+import Sidebar from "@/components/Sidebar";
 import { TopPanel } from "./components/TopPanel";
 import { useDesignElements } from "@/hooks/useDesignElements";
 import { fetchSlogans, generateAIGraphics } from "@/api/ai";

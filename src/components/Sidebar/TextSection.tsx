@@ -55,45 +55,145 @@ export const TextSection: React.FC<Props> = ({
                     color: text.color,
                     fontFamily: text.fontFamily,
                     fontSize: text.fontSize,
+                    fontWeight: text.bold ? "bold" : "normal",
+                    fontStyle: text.italic ? "italic" : "normal",
+                    textAlign: text.align || "left",
                   }}
                 >
                   {text.content}
                 </span>
               )}
 
-              <button
-                onClick={() => setExpandedTextId(isExpanded ? null : text.id)}
-                className="ml-2 text-gray-300 hover:text-indigo-400"
-              >
-                ⚙️
-              </button>
+              <div className="flex gap-2 ml-2">
+                <button
+                  onClick={() => setExpandedTextId(isExpanded ? null : text.id)}
+                  className="text-gray-300 hover:text-indigo-400"
+                  title={t("edit") || "Edit"}
+                >
+                  ⚙️
+                </button>
+                <button
+                  onClick={() =>
+                    onUpdateText(selectedView, text.id, { remove: true })
+                  }
+                  className="text-red-500 hover:text-red-400"
+                  title={t("delete") || "Delete"}
+                >
+                  🗑️
+                </button>
+              </div>
             </div>
 
             {isExpanded && (
-              <div className="mt-3 border-t border-slate-700 pt-3 space-y-2">
-                <label className="block text-xs mb-1">Print Color</label>
-                <ColorPicker
-                  colors={easyWeedColors as PrintColor[]}
-                  selectedColor={text.print?.colorSlug || text.color}
-                  onSelect={(color) =>
-                    onUpdateText(selectedView, text.id, {
-                      color: color.hex,
-                      print: {
-                        material: "easyWeed",
-                        colorSlug: color.slug,
-                        hex: color.hex,
-                      },
-                    })
-                  }
-                  variant="text"
-                  size="small"
-                />
+              <div className="mt-3 border-t border-slate-700 pt-3 space-y-3">
+                {/* Font Size Slider */}
+                <div>
+                  <label className="block text-xs mb-1">Font Size: {text.fontSize}px</label>
+                  <input
+                    type="range"
+                    min={8}
+                    max={100}
+                    step={1}
+                    value={text.fontSize}
+                    onChange={(e) =>
+                      onUpdateText(selectedView, text.id, {
+                        fontSize: parseInt(e.target.value),
+                      })
+                    }
+                    className="w-full accent-indigo-500"
+                  />
+                </div>
+
+                {/* Font Family */}
+                <div>
+                  <label className="block text-xs mb-1">Font Family</label>
+                  <select
+                    value={text.fontFamily || "Roboto"}
+                    onChange={(e) =>
+                      onUpdateText(selectedView, text.id, { fontFamily: e.target.value })
+                    }
+                    className="w-full p-1 bg-slate-900 border border-slate-600 rounded text-sm"
+                  >
+                    <option value="Roboto">Roboto</option>
+                    <option value="Oswald">Oswald</option>
+                    <option value="Montserrat">Montserrat</option>
+                    <option value="Lobster">Lobster</option>
+                    <option value="Playfair Display">Playfair Display</option>
+                    <option value="Poppins">Poppins</option>
+                    <option value="Raleway">Raleway</option>
+                    <option value="Open Sans">Open Sans</option>
+                  </select>
+                </div>
+
+                {/* Color Picker */}
+                <div>
+                  <label className="block text-xs mb-1">{t("textColor")}</label>
+                  <ColorPicker
+                    colors={easyWeedColors as PrintColor[]}
+                    selectedColor={text.print?.colorSlug || text.color}
+                    onSelect={(color) =>
+                      onUpdateText(selectedView, text.id, {
+                        color: color.hex,
+                        print: {
+                          material: "easyWeed",
+                          colorSlug: color.slug,
+                          hex: color.hex,
+                        },
+                      })
+                    }
+                    variant="text"
+                    size="small"
+                  />
+                </div>
+
+                {/* Text Style Controls */}
+                <div className="flex justify-between items-center">
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() =>
+                        onUpdateText(selectedView, text.id, { bold: !text.bold })
+                      }
+                      className={`px-2 py-1 rounded ${
+                        text.bold ? "bg-indigo-600" : "bg-slate-700"
+                      }`}
+                    >
+                      <b>B</b>
+                    </button>
+                    <button
+                      onClick={() =>
+                        onUpdateText(selectedView, text.id, { italic: !text.italic })
+                      }
+                      className={`px-2 py-1 rounded ${
+                        text.italic ? "bg-indigo-600" : "bg-slate-700"
+                      }`}
+                    >
+                      <i>I</i>
+                    </button>
+                  </div>
+
+                  <div className="flex gap-2">
+                    {["left", "center", "right"].map((align) => (
+                      <button
+                        key={align}
+                        onClick={() =>
+                          onUpdateText(selectedView, text.id, { align })
+                        }
+                        className={`px-2 py-1 rounded ${
+                          text.align === align ? "bg-indigo-600" : "bg-slate-700"
+                        }`}
+                      >
+                        {align === "left" ? "⬅" : align === "center" ? "↔" : "➡"}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
           </div>
         );
       })}
 
+      {/* Add New Text */}
       {!showTextInput && (
         <Button onClick={() => setShowTextInput(true)}>{t("addText")}</Button>
       )}
