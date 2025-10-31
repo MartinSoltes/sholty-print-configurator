@@ -1,19 +1,21 @@
 import type { Product } from "./product";
 
-export interface ColorVariant {
-  name: string;      // e.g. "Biela"
-  slug: string;      // e.g. "white"
-  hex: string;       // "#FFFFFF"
-  front: string;     // path to front image
-  back: string;      // path to back image
+export interface BaseColor {
+  slug: string;
+  label?: string;
+  hex: string;
 }
 
-export interface PrintColor {
-  slug: string;
-  label: string;
-  hex: string;
-  image?: string;
+export interface ColorVariant extends BaseColor {
+  /** Product-specific image paths */
+  front: string;
+  back: string;
 }
+
+export type PrintColor = BaseColor & {    // used for vinyl print colors
+  image?: string;                         // optional preview swatch
+  material?: string;                      // e.g. "easyWeed", "brick", etc.
+};
 
 // Derived type for product identification
 export type ProductValue = Product["value"];

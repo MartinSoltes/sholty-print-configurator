@@ -29,5 +29,7 @@
   "productColor": "Farba produktu",
   "aiGraphics": "AI Grafika",
   "enterGraphicsIdea": "Zadajte nápad na grafiku",
-  "generateGraphics": "Vygenerovať grafiku"
+  "generateGraphics": "Vygenerovať grafiku",
+  "textColor": "Farba textu",
+  "overlayColor": "Farba prekrytia"
 }

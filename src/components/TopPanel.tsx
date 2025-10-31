@@ -1,5 +1,5 @@
 import React from "react";
-import OptionButton from "./OptionButton";
+import OptionButton from "./ui/OptionButton";
 import { useTranslation } from "@/context/TranslationContext";
 
 interface TopPanelProps {

@@ -17,7 +17,7 @@ interface FileButtonProps {
   files?: Pick<FileInfo, "name" | "src">[];
 }
 
-const FileButton: React.FC<FileButtonProps> = ({
+export const FileButton: React.FC<FileButtonProps> = ({
   callback,
   multiple = false,
   accept = "image/*",
@@ -111,5 +111,3 @@ const FileButton: React.FC<FileButtonProps> = ({
     </label>
   );
 };
-
-export default FileButton;

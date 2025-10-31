@@ -29,5 +29,7 @@
   "productColor": "Product color",
   "aiGraphics": "AI Graphics",
   "enterGraphicsIdea": "Describe your graphic idea",
-  "generateGraphics": "Generate Graphics"
+  "generateGraphics": "Generate Graphics",
+  "textColor": "Text Color",
+  "overlayColor": "Overlay Color"
 }
