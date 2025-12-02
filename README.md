@@ -1,4 +1,4 @@
-# AI Print Configurator 🎨🤖
+# Print Configurator 🎨🤖
 
 Create custom T-shirt designs with AI-generated slogans and icons.
 
@@ -11,9 +11,6 @@ Create custom T-shirt designs with AI-generated slogans and icons.
 
 ## Tech Stack
 Next.js, TypeScript, Tailwind, OpenAI API, Supabase, Stripe
-
-## Demo
-[ai-print.vercel.app](https://ai-print.vercel.app)
 
 ## Setup
 1. Clone repo
