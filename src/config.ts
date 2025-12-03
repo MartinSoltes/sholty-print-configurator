@@ -8,7 +8,7 @@ export const getViews = (t: (key: keyof typeof sk) => string) => [
 
 export const getProducts = (t: (key: keyof typeof sk) => string): Product[] => [
   { label: t("tshirt"), value: "tshirt" },
-/*   { label: t("polo"), value: "polo" }, */
+ /*   { label: t("polo"), value: "polo" }, */
   { label: t("hoodie"), value: "hoodie" },
 ];
 
