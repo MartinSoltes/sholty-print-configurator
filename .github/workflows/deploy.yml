@@ -32,5 +32,5 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT }}
           protocol: ftp
-          local-dir: dist
+          local-dir: dist/
           server-dir: ${{ secrets.FTP_REMOTE_DIR }}
