@@ -24,7 +24,7 @@ const App: React.FC = () => {
   const [showTextInput, setShowTextInput] = useState<boolean>(false);
   const previewRef = useRef<HTMLDivElement>(null);
   const { images, texts, handleAddImage, handleAddText, updateImage, updateText, undo, redo, canUndo, canRedo } = useDesignElements();
-  const [aiEnabled, setAiEnabled] = useState(true);
+  const [aiEnabled, setAiEnabled] = useState(false);
   const [aiResults, setAiResults] = useState<string[]>([]);
   const [aiLoading, setAiLoading] = useState(false);
   const [aiGraphicsPrompt, setAiGraphicsPrompt] = useState("");

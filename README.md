@@ -12,6 +12,9 @@ Create custom T-shirt designs with AI-generated slogans and icons.
 ## Tech Stack
 Next.js, TypeScript, Tailwind, OpenAI API, Supabase, Stripe
 
+## Demo
+https://konfigurator.sholtystudio.sk/
+
 ## Setup
 1. Clone repo
 2. Add `.env.local` with API keys
