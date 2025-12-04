@@ -5,6 +5,7 @@ import { ProductSelector } from "./ProductSelector";
 import { ImageSection } from "./ImageSection";
 import { TextSection } from "./TextSection";
 import { AiSection } from "./AiSection";
+import { ExportSection } from "./ExportSection";
 
 interface SidebarProps {
   enableProductSelection: boolean;
@@ -35,6 +36,7 @@ interface SidebarProps {
   onColorSelect: (color: ColorVariant) => void;
   referenceImages: { name: string; src: string; file: File }[];
   setReferenceImages: (files: { name: string; src: string; file: File }[]) => void;
+  onExport: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = (props) => {
@@ -54,6 +56,8 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
       <TextSection {...props} />
 
       {props.aiEnabled && <AiSection {...props} />}
+
+      <ExportSection {...props} />
     </div>
   );
 };

@@ -7,7 +7,6 @@ interface TopPanelProps {
   views: { label: string; value: "front" | "back" }[];
   selectedView: "front" | "back";
   onViewSelect: (value: "front" | "back") => void;
-  onExport: () => void;
   onUndo: () => void;
   onRedo: () => void;
   canUndo: boolean;
@@ -18,7 +17,6 @@ export const TopPanel: React.FC<TopPanelProps> = ({
     views,
     selectedView,
     onViewSelect,
-    onExport,
     onUndo,
     onRedo,
     canUndo,
@@ -27,11 +25,13 @@ export const TopPanel: React.FC<TopPanelProps> = ({
   const { t } = useTranslation();
 
   return (
-    <div className="w-full bg-slate-900 text-white p-4 flex items-center justify-center md:justify-between gap-4 flex-wrap sticky top-0 z-20">
-      
-      {/* View Selection */}
+    <div className="w-full bg-slate-900 text-white p-4 flex items-center justify-between gap-4 sticky top-0 z-20">
+      <div></div>
+
+      <div className="flex flex-wrap items-center gap-4">
+        {/* View Selection */}
         {views && (
-          <div className="flex flex-col items-center justify-between gap-1 flex-wrap">
+          <div className="">
             {/* <h2 className="font-semibold me-2">{t("productSide")}</h2> */}
             <div className="grid grid-cols-2 gap-2">
               {views.map((view, index) => (
@@ -48,7 +48,6 @@ export const TopPanel: React.FC<TopPanelProps> = ({
           </div>
         )}
 
-      <div className="flex items-center justify-between gap-4">
         <div className="flex gap-2 flex-wrap">
           {/* UNDO */}
           <button
@@ -90,14 +89,6 @@ export const TopPanel: React.FC<TopPanelProps> = ({
                             transition pointer-events-none">
               {t("redo")}
             </div>
-          </button>
-
-          {/* export */}
-          <button
-            onClick={onExport}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition text-nowrap"
-          >
-            {t("exportDesign")}
           </button>
         </div>
       </div>

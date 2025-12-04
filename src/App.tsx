@@ -135,6 +135,7 @@ const App: React.FC = () => {
           setReferenceImages={setReferenceImages}
           aiEnabled={aiEnabled}
           enableProductSelection={enableProductSelection}
+          onExport={handleExport}
         />
       </div>
 
@@ -144,7 +145,6 @@ const App: React.FC = () => {
           selectedView={selectedView}
           views={views}
           onViewSelect={setSelectedView}
-          onExport={handleExport}
           onUndo={undo}
           onRedo={redo}
           canUndo={canUndo}
