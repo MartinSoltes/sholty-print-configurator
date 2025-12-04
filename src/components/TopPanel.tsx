@@ -11,6 +11,7 @@ interface TopPanelProps {
   onRedo: () => void;
   canUndo: boolean;
   canRedo: boolean;
+  onToggleSidebar?: () => void;
 }
 
 export const TopPanel: React.FC<TopPanelProps> = ({
@@ -21,12 +22,27 @@ export const TopPanel: React.FC<TopPanelProps> = ({
     onRedo,
     canUndo,
     canRedo,
+    onToggleSidebar,
 }) => {
   const { t } = useTranslation();
 
   return (
     <div className="w-full bg-slate-900 text-white p-4 flex items-center justify-between gap-4 sticky top-0 z-20">
-      <div></div>
+      <div>
+        {/* Hamburger len na mobile */}
+        {onToggleSidebar && (
+          <button
+            className="md:hidden p-2 border rounded-lg"
+            onClick={onToggleSidebar}
+            aria-label="Open sidebar"
+          >
+            {/* jednoduchý hamburger ikon button */}
+            <div className="w-5 h-[2px] mb-1 bg-current" />
+            <div className="w-5 h-[2px] mb-1 bg-current" />
+            <div className="w-5 h-[2px] bg-current" />
+          </button>
+        )}
+      </div>
 
       <div className="flex flex-wrap items-center gap-4">
         {/* View Selection */}

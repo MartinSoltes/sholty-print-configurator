@@ -31,6 +31,7 @@ const App: React.FC = () => {
   const [aiGraphicsResults, setAiGraphicsResults] = useState<string[]>([]);
   const [aiGraphicsLoading, setAiGraphicsLoading] = useState(false);
   const [referenceImages, setReferenceImages] = useState<{ name: string; src: string; file: File }[]>([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // --- AI graphics generation ---
   const handleGenerateAIGraphics = async (prompt: string, refs: string[]) => {
@@ -103,9 +104,9 @@ const App: React.FC = () => {
 
   // --- Render ---
   return (
-    <main className="h-screen grid grid-cols-12 h-full">
-      {/* --- Sidebar --- */}
-      <div className="col-span-3 h-full overflow-y-scroll">
+    <main className="h-screen grid grid-cols-1 md:grid-cols-12">
+      {/* --- Sidebar (desktop) --- */}
+      <div className="hidden md:block md:col-span-3 h-full overflow-y-scroll">
         <Sidebar
           products={products}
           selectedProduct={selectedProduct}
@@ -139,8 +140,54 @@ const App: React.FC = () => {
         />
       </div>
 
+      {/* --- Sidebar (mobile overlay) --- */}
+      {isSidebarOpen && (
+        <div className="fixed inset-0 z-40 flex md:hidden">
+          {/* Drawer */}
+          <div className="w-4/5 max-w-xs h-full overflow-y-scroll bg-white shadow-xl">
+            <Sidebar
+              products={products}
+              selectedProduct={selectedProduct}
+              selectedView={selectedView}
+              onProductSelect={setSelectedProduct}
+              images={images}
+              onAddImage={handleAddImage}
+              texts={texts}
+              newText={newText}
+              showTextInput={showTextInput}
+              setShowTextInput={setShowTextInput}
+              setNewText={setNewText}
+              onAddText={handleAddText}
+              onGenerateAI={handleGenerateAI}
+              aiResults={aiResults}
+              aiLoading={aiLoading}
+              colors={colors}
+              selectedColor={selectedColor}
+              onColorSelect={setSelectedColor}
+              onUpdateText={updateText}
+              aiGraphicsPrompt={aiGraphicsPrompt}
+              setAiGraphicsPrompt={setAiGraphicsPrompt}
+              aiGraphicsResults={aiGraphicsResults}
+              aiGraphicsLoading={aiGraphicsLoading}
+              onGenerateAIGraphics={handleGenerateAIGraphics}
+              referenceImages={referenceImages}
+              setReferenceImages={setReferenceImages}
+              aiEnabled={aiEnabled}
+              enableProductSelection={enableProductSelection}
+              onExport={handleExport}
+            />
+          </div>
+
+          {/* Backdrop – klik zatvorí sidebar */}
+          <div
+            className="flex-1 bg-black/50"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        </div>
+      )}
+
       {/* --- Main Preview Area --- */}
-      <div className="col-span-9 h-full overflow-scroll">
+      <div className="col-span-1 md:col-span-9 h-full overflow-scroll">
         <TopPanel
           selectedView={selectedView}
           views={views}
@@ -149,6 +196,7 @@ const App: React.FC = () => {
           onRedo={redo}
           canUndo={canUndo}
           canRedo={canRedo}
+          onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
         />
 
         <div
