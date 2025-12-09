@@ -10,10 +10,11 @@ export const ExportSection: React.FC<ExportSectionProps> = ({ onExport }) => {
     
   return (
     <div className="mt-6">
-      <h2 className="text-2xl font-semibold mb-4">{t("exportDesign")}</h2>
+      <hr className="my-4 border-neutral-700" />
+      <h2 className="text-2xl font-semibold mb-4">{t("export")}</h2>
       <button
             onClick={onExport}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition text-nowrap"
+            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition text-nowrap w-full cursor-pointer"
           >
             {t("exportDesign")}
           </button>
