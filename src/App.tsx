@@ -9,6 +9,7 @@ import { fetchSlogans, generateAIGraphics } from "@/api/ai";
 import { useTranslation } from "@/context/TranslationContext";
 import { useColors } from "@/hooks/useColors";
 import { ColorVariant } from "@/types";
+import { X } from "lucide-react";
 
 // --- 🧠 Main Component ---
 const App: React.FC = () => {
@@ -182,7 +183,15 @@ const App: React.FC = () => {
           <div
             className="flex-1 bg-black/50"
             onClick={() => setIsSidebarOpen(false)}
-          />
+          >
+            <button
+              className="md:hidden p-3 border border-neutral-700 rounded-lg static right-4 top-4 m-4 bg-white cursor-pointer"
+              aria-label="Close sidebar"
+            >
+              {/* jednoduchý hamburger ikon button */}
+              <X size={20}/>
+            </button>
+          </div>
         </div>
       )}
 

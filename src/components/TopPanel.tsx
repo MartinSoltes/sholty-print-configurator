@@ -1,7 +1,7 @@
 import React from "react";
 import OptionButton from "./ui/OptionButton";
 import { useTranslation } from "@/context/TranslationContext";
-import { Undo2, Redo2 } from "lucide-react";
+import { Undo2, Redo2, Menu } from "lucide-react";
 
 interface TopPanelProps {
   views: { label: string; value: "front" | "back" }[];
@@ -32,14 +32,12 @@ export const TopPanel: React.FC<TopPanelProps> = ({
         {/* Hamburger len na mobile */}
         {onToggleSidebar && (
           <button
-            className="md:hidden p-2 border rounded-lg"
+            className="md:hidden p-3 border rounded-lg"
             onClick={onToggleSidebar}
             aria-label="Open sidebar"
           >
             {/* jednoduchý hamburger ikon button */}
-            <div className="w-5 h-[2px] mb-1 bg-current" />
-            <div className="w-5 h-[2px] mb-1 bg-current" />
-            <div className="w-5 h-[2px] bg-current" />
+            <Menu size={20}/>
           </button>
         )}
       </div>
