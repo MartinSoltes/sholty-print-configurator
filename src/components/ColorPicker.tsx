@@ -40,7 +40,7 @@ export const ColorPicker = <T extends AnyColor>({
 
   return (
     <div className="flex flex-col gap-2 mb-4">
-      <h3 className="text-lg font-semibold mb-1">{labelText}</h3>
+      {/* <h3 className="text-lg font-semibold mb-1">{labelText}</h3> */}
       <div className="flex flex-wrap gap-2">
         {colors.map((color) => {
           const isSelected =

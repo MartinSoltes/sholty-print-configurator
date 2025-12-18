@@ -5,6 +5,8 @@ import easyWeedColors from "@/data/colors/print/easyWeed.json";
 import { useTranslation } from "@/context/TranslationContext";
 import { TextItem, PrintColor } from "@/types";
 import { TextAlignStart, TextAlignCenter, TextAlignEnd, Settings, Trash } from "lucide-react";
+import { FONTS } from "@/config";
+import { FontSelect } from "../FontSelect";
 
 interface Props {
   selectedView: "front" | "back";
@@ -107,28 +109,19 @@ export const TextSection: React.FC<Props> = ({
 
                 {/* Font Family */}
                 <div>
-                  <label className="block text-xs mb-1">Font Family</label>
-                  <select
-                    value={text.fontFamily || "Roboto"}
-                    onChange={(e) =>
-                      onUpdateText(selectedView, text.id, { fontFamily: e.target.value })
-                    }
-                    className="w-full p-1 bg-slate-900 border border-slate-600 rounded text-sm"
-                  >
-                    <option value="Roboto">Roboto</option>
-                    <option value="Oswald">Oswald</option>
-                    <option value="Montserrat">Montserrat</option>
-                    <option value="Lobster">Lobster</option>
-                    <option value="Playfair Display">Playfair Display</option>
-                    <option value="Poppins">Poppins</option>
-                    <option value="Raleway">Raleway</option>
-                    <option value="Open Sans">Open Sans</option>
-                  </select>
+                  <label className="block text-xs mb-2">{t("fontFamily")}</label>
+                  <FontSelect
+                    fonts={[...FONTS]}
+                    selectedFont={text.fontFamily || "Roboto"}
+                    onSelect={(font) => {
+                      const value = typeof font === "string" ? font : font.value;
+                      onUpdateText(selectedView, text.id, { fontFamily: value });
+                    }}/>
                 </div>
 
                 {/* Color Picker */}
                 <div>
-                  <label className="block text-xs mb-1">{t("textColor")}</label>
+                  <label className="block text-xs mb-2">{t("textColor")}</label>
                   <ColorPicker
                     colors={easyWeedColors as PrintColor[]}
                     selectedColor={text.color}

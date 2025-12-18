@@ -49,3 +49,14 @@ export const backgrounds = [
         image: './assets/backgrounds/hoodie/white/back.jpg'
     }
 ]
+
+export const FONTS = [
+  "Roboto",
+  "Oswald",
+  "Montserrat",
+  "Lobster",
+  "Playfair Display",
+  "Poppins",
+  "Raleway",
+  "Open Sans",
+];

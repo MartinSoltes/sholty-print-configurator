@@ -1,5 +1,4 @@
 import React from "react";
-import OptionButton from "../ui/OptionButton";
 import { ColorPicker } from "../ColorPicker";
 import { useTranslation } from "@/context/TranslationContext";
 import { Product, ColorVariant } from "@/types";
