@@ -34,5 +34,8 @@
   "textColor": "Farba textu",
   "overlayColor": "Farba prekrytia",
   "delete": "Odstrániť",
-  "edit": "Upraviť"
+  "edit": "Upraviť",
+  "printType": "Typ potlače",
+  "vinylTransfer": "Vinylový transfer",
+  "digitalPrint": "Digitálna potlač"
 }

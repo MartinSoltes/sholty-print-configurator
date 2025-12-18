@@ -1,8 +1,9 @@
 import React from "react";
 import { FileButton } from "../ui/FileButton";
-import { Button } from "../ui/Button";
 import { useTranslation } from "@/context/TranslationContext";
 import { DesignImage, ImageItem } from "@/types";
+import OptionButtonGroup from "../ui/groups/OptionButtonGroup";
+import { getPrintOptions } from "@/config";
 
 interface Props {
   selectedView: "front" | "back";
@@ -32,6 +33,16 @@ export const ImageSection: React.FC<Props> = ({ selectedView, images, onAddImage
       <h2 className="text-2xl font-semibold mb-2">
         {selectedView === "front" ? t("frontPrint") : t("backPrint")}
       </h2>
+      <h3 className="text-xl font-semibold mb-1">{t("printType")}</h3>
+
+      <OptionButtonGroup
+        options={getPrintOptions(t)}
+        type="checkbox"
+        selectedValue=""
+        onChange={() => {}}
+        className="mb-4"
+      />
+
       <h3 className="text-lg font-semibold mb-1">{t("logoOrImage")}</h3>
 
       {images[selectedView].length > 0 && (

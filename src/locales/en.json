@@ -34,5 +34,8 @@
   "textColor": "Text Color",
   "overlayColor": "Overlay Color",
   "delete": "Delete",
-  "edit": "Edit"
+  "edit": "Edit",
+  "printType": "Print Type",
+  "vinylTransfer": "Vinyl Transfer",
+  "digitalPrint": "Digital Print"
 }

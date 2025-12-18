@@ -12,6 +12,11 @@ export const getProducts = (t: (key: keyof typeof sk) => string): Product[] => [
   { label: t("hoodie"), value: "hoodie" },
 ];
 
+export const getPrintOptions = (t: (key: keyof typeof sk) => string) => [
+    { label: t("vinylTransfer"), value: "transfer", colorsConfig: "@/data/colors/print/easyWeed.json" },
+    { label: t("digitalPrint"), value: "print", colorsConfig: "" },
+];
+
 export const backgrounds = [
     {
         type: 'tshirt',

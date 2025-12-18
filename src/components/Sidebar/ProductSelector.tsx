@@ -3,6 +3,7 @@ import OptionButton from "../ui/OptionButton";
 import { ColorPicker } from "../ColorPicker";
 import { useTranslation } from "@/context/TranslationContext";
 import { Product, ColorVariant } from "@/types";
+import OptionButtonGroup from "../ui/groups/OptionButtonGroup";
 
 interface Props {
   products: Product[];
@@ -37,16 +38,13 @@ export const ProductSelector: React.FC<Props> = ({
         </select>
       </h2>
 
-      {products.map((product, index) => (
-        <OptionButton
-          key={index}
-          name="product"
-          option={product}
-          type="radio"
-          checked={selectedProduct === product.value}
-          onChange={(value: string) => onProductSelect(value)}
-        />
-      ))}
+      <OptionButtonGroup
+        options={products}
+        type="radio"
+        selectedValue={selectedProduct}
+        onChange={onProductSelect}
+        className="mt-4"
+      />
 
       {colors?.length > 0 && (
         <div className="mt-4">

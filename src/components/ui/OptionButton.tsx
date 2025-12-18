@@ -1,7 +1,6 @@
 import React from 'react'
 
 interface OptionButtonProps {
-  name: string;
   option: {
     label: string;
     value: string;
@@ -12,7 +11,6 @@ interface OptionButtonProps {
 }
 
 const OptionButton: React.FC<OptionButtonProps> = ({
-  name,
   option,
   type,
   checked,

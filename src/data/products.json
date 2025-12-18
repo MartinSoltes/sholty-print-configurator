@@ -1,5 +1,0 @@
-[
-  { "type": "tshirt", "label": "Tričko", "colors": "@/config/colors/tshirtColors.json" },
-  { "type": "polo", "label": "Polo", "colors": "@/config/colors/poloColors.json" },
-  { "type": "hoodie", "label": "Mikina", "colors": "@/config/colors/hoodieColors.json" }
-]

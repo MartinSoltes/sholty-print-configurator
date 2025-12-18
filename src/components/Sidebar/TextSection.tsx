@@ -130,7 +130,7 @@ export const TextSection: React.FC<Props> = ({
                   <label className="block text-xs mb-1">{t("textColor")}</label>
                   <ColorPicker
                     colors={easyWeedColors as PrintColor[]}
-                    selectedColor={text.print?.colorSlug || text.color}
+                    selectedColor={text.color}
                     onSelect={(color) =>
                       onUpdateText(selectedView, text.id, {
                         color: color.hex,
