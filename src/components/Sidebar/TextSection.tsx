@@ -4,6 +4,7 @@ import { ColorPicker } from "../ColorPicker";
 import easyWeedColors from "@/data/colors/print/easyWeed.json";
 import { useTranslation } from "@/context/TranslationContext";
 import { TextItem, PrintColor } from "@/types";
+import { TextAlignStart, TextAlignCenter, TextAlignEnd, Settings, Trash } from "lucide-react";
 
 interface Props {
   selectedView: "front" | "back";
@@ -70,7 +71,7 @@ export const TextSection: React.FC<Props> = ({
                   className="text-gray-300 hover:text-indigo-400"
                   title={t("edit") || "Edit"}
                 >
-                  ⚙️
+                  <Settings size={20} />
                 </button>
                 <button
                   onClick={() =>
@@ -79,7 +80,7 @@ export const TextSection: React.FC<Props> = ({
                   className="text-red-500 hover:text-red-400"
                   title={t("delete") || "Delete"}
                 >
-                  🗑️
+                  <Trash size={20} />
                 </button>
               </div>
             </div>
@@ -182,7 +183,7 @@ export const TextSection: React.FC<Props> = ({
                           text.align === align ? "bg-indigo-600" : "bg-slate-700"
                         }`}
                       >
-                        {align === "left" ? "⬅" : align === "center" ? "↔" : "➡"}
+                        {align === "left" ? <TextAlignStart size={20} /> : align === "center" ? <TextAlignCenter size={20} /> : <TextAlignEnd size={20} />}
                       </button>
                     ))}
                   </div>

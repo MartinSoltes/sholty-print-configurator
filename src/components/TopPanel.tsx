@@ -51,7 +51,6 @@ export const TopPanel: React.FC<TopPanelProps> = ({
               {views.map((view, index) => (
                 <OptionButton
                   key={index}
-                  name="view"
                   option={view}
                   type="radio"
                   checked={selectedView === view.value}
